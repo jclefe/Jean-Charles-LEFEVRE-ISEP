@@ -1,0 +1,24 @@
+import java.util.Scanner;
+public class Hello {
+
+	public static void main(String[] args) {
+		double volume;
+		Scanner scan = new Scanner(System.in); //creation du scanner
+		System.out.println(" Longueur? " );    //demande de l'algorithme des differentes valeurs
+		double longueur = scan.nextDouble(); 
+		System.out.println(" Largeur? " );
+		double largeur = scan.nextDouble(); 
+		System.out.println(" Hauteur? " );
+		double hauteur = scan.nextDouble(); 
+		volume= longueur*largeur*hauteur;    //calcul du volume en fonction des valeurs
+		if (volume<0) //un volume ne peut pas etre negatif
+		{ 
+			System.out.println("Veuillez recommencer et rentrer des valeurs positives");
+		}
+		else
+		{
+		System.out.println("Le volume est de " + volume );
+		}
+	}
+
+}

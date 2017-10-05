@@ -1,0 +1,38 @@
+package equation;
+import java.util.Scanner;
+
+public class eq {
+
+	public static void main(String[] args) {
+		double discriminant; //initialisation des variables
+		double sol1;
+		double sol2;
+		double sol3;
+		Scanner scan = new Scanner(System.in); //init. du scanner
+		System.out.println(" coefficient a? " ); //demande des différents coefficients
+		double a = scan.nextDouble(); 
+		System.out.println(" coefficient b? " );
+		double b = scan.nextDouble(); 
+		System.out.println(" coefficient c? " );
+		double c = scan.nextDouble(); 
+		discriminant=Math.pow(b,2)-4*a*c;  //calcul du discriminant
+		if (discriminant>0) 			//calcul des solutions en fonction du discr.
+		  {  
+			  sol1=(-b-Math.sqrt(discriminant))/(2*a);
+			  sol2=(-b+Math.sqrt(discriminant))/(2*a);
+			  System.out.println("La première solution est "+sol1);
+			  System.out.println("La deuxième solution est"+sol2);					
+		  }
+		if (discriminant==0) 
+		  {
+			  sol3=-b/(2*a);
+			  System.out.println("L'unique solution est"+sol3);
+		  }
+		if (discriminant<0) 
+		  {
+			  System.out.println("Pas de solution");
+		  }
+		
+	}	
+
+	}

@@ -1,0 +1,9 @@
+f0=1000;
+A=2;
+fe=16000;
+x=0:1/fe:5/f0;
+y=A*sin(2*pi*f0*x);
+plot(x,max(y))
+xlabel('seconds')
+ylabel('Volt')
+title('Signal in the time domain - 5 periods')

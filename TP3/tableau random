@@ -1,0 +1,38 @@
+import java.util.Scanner;
+
+public class Exo1 {
+
+	public static void main(String[] args) {
+		generateDoubleArray();
+		
+	}
+
+	
+	public static int [][] generateDoubleArray(){
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Quelle taille pour le tableau?");
+		System.out.println("Nombre de lignes?");
+		int nbLignes = scan.nextInt();
+		System.out.println("Nombre de colonnes?");
+		int nbColonnes = scan.nextInt();
+		int[][] tab2 = new int[nbLignes][nbColonnes];
+		for (int i = 0; i < tab2.length; i++) {
+			for (int j = 0; j < tab2[i].length; j++) {
+				int a1 = (int) (Math.random()*10);
+				tab2[i][j] = a1;
+			}
+
+		}
+		for (int f = 0; f < tab2.length; f++) {
+			for (int i = 0; i < tab2[f].length; i++) {
+				System.out.print(tab2[f][i] + " ");
+			}
+			System.out.println("");
+		}
+		
+		return  tab2;
+	}
+
+	
+
+}

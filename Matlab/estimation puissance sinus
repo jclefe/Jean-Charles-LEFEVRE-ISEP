@@ -1,0 +1,10 @@
+f0=1000
+fe=16000
+n=fe/f0
+A=2
+puissance=0
+somme=0
+for k=0:1:n
+    somme=somme+A*A*sin(2*pi*f0*k/fe)*sin(2*pi*f0*k/fe)
+end
+puissance=somme/n

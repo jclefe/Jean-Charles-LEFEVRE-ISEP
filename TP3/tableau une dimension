@@ -1,0 +1,23 @@
+import java.util.Scanner;
+public class tableau {
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in); 
+		System.out.println("Quelle taille pour le tableau?");
+		int k=scan.nextInt();
+		int size=k;
+		float [] tab1 = new float [size];
+		
+		for (int i=0;i<tab1.length;i++)
+		{
+			System.out.println("Valeur " + (i+1) + " du tableau " );
+			float a1 = scan.nextFloat();
+			tab1[i]=a1;
+		}
+		for (int i=0;i<tab1.length;i++)
+		{
+		System.out.print(tab1[i]+ " ");
+		}
+	}
+
+}

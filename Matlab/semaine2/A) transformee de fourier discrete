@@ -1,0 +1,11 @@
+A=2;
+f0=500;
+fe=8000;
+x=0:1/fe:50e-3; %en divisant 50e-3 par 1/fe, on trouve 400 points
+f=0:fe/400:fe; %on divise fe par 400
+y=A*sin(2*pi*f0*x);
+z=20*log10(abs(fft(y))); %on applique la fft a x mais on fait le graphe avec les freq, pas le temps
+plot(f,z)
+axis([0 fe 0 60]); %axis([xmin xmax ymin ymax])
+%les deux pics representent la periode du spectre à gauche on a 0+f1 et à
+%droite on a Fe-f1 (c est pour ca que shannon doit etre respecte)

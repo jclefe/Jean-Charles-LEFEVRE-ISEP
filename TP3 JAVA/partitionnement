@@ -1,0 +1,35 @@
+
+public class Partitionnement {
+
+	public static void main(String[] args) {
+		int[][] Tableau = Exo1.generateDoubleArray();
+		int moyenne = h1.moyenne(Tableau);
+		int indice1 = 0;
+		int indice2 = 0;
+		int nbLignes = Tableau.length;
+		int nbColonnes = Tableau[0].length;
+		int size = Tableau.length * Tableau[0].length;
+		int[] Tableau1 = new int[size];
+		int[] Tableau2 = new int[size];
+		for (int i = 0; i < nbLignes; i++) {
+			for (int j = 0; j < nbColonnes; j++) {
+				if (Tableau[i][j] <= moyenne) {
+					Tableau1[indice1] = Tableau[i][j];
+					indice1 = indice1 + 1;
+				}
+				if (Tableau[i][j] > moyenne) {
+					Tableau2[indice2] = Tableau[i][j];
+					indice2 = indice2 + 1;
+				}
+			}
+
+		}
+		for (int k=0; k<(indice1);k++) {
+			System.out.print(Tableau1[k]+" ");
+		}
+		System.out.println("");
+		for (int k=0; k<(indice2);k++) {
+			System.out.print(Tableau2[k]+" ");
+		}
+	}
+}

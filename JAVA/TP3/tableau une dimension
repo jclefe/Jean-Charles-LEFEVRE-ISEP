@@ -4,8 +4,7 @@ public class tableau {
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in); 
 		System.out.println("Quelle taille pour le tableau?");
-		int k=scan.nextInt();
-		int size=k;
+		int size=scan.nextInt();
 		float [] tab1 = new float [size];
 		
 		for (int i=0;i<tab1.length;i++)

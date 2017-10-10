@@ -2,7 +2,11 @@ import java.util.Scanner;
 public class Moyenne {
 
 	public static void main(String[] args) {
-		int[][] Tableau =  Exo1.generateDoubleArray();
+		moyenne();
+		
+	}
+	public static int moyenne(int[][] Tableau) {	
+		//int[][] Tableau =  h.generateDoubleArray();
 		int nbLignes=Tableau.length;
 		int nbColonnes=Tableau[0].length;
 		int somme=0;
@@ -11,17 +15,19 @@ public class Moyenne {
 				somme=somme+Tableau[i][j];
 			}
 		}
-		int moyenne=somme/(nbColonnes*nbLignes);
-		System.out.println("Moyenne : " + moyenne);
-		for (int h=0;h<nbLignes;h++) {
-			for (int f=0; f<nbColonnes;f++) {
-				if(Tableau[h][f]==moyenne)
-				{
-					System.out.print("ligne "+(h+1)+ " et colonne "+(f+1));
-					
-				}
-			}
-		}
+		int Moyenne=somme/(nbColonnes*nbLignes);
+		System.out.println("Moyenne : " + Moyenne);
+		//for (int h=0;h<nbLignes;h++) {
+			//for (int f=0; f<nbColonnes;f++) {
+			//	if(Tableau[h][f]==Moyenne)
+			//	{
+			//		System.out.print("ligne "+(h+1)+ " et colonne "+(f+1));
+			//		
+			//	}
+			//}
+		//}
+	return Moyenne;
 	}
+
 
 }   

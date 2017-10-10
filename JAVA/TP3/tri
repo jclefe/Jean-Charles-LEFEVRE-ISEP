@@ -1,0 +1,36 @@
+public class h3 {
+
+	public static void main(String[] args) {
+		int[][] Tableau = h.generateDoubleArray();
+		int val=0;
+		int nbLignes=Tableau.length;
+		int nbColonnes=Tableau[0].length;
+		for (int i=0;i<(nbLignes-1);i++) {
+			if (i>0) {
+				if (Tableau[i][0]<Tableau[i-1][nbColonnes-1]) {
+					val=Tableau[i][0];
+					Tableau[i][0]=Tableau[i-1][nbColonnes-1];
+					Tableau[i-1][nbColonnes-1]=val; 
+			}
+			}
+			for (int j=0; j<(nbColonnes-1);j++) {     //il y a un probleme dans cette partie
+				val=Tableau[i][j];
+        for (int k=j;k<(nbColonnes-1);k++) {
+        if (Tableau[i][j]>Tableau[i][k]) {
+					val=Tableau[i][k];
+				}
+        }
+        }
+			}
+		}
+
+	
+		for (int f = 0; f < Tableau.length; f++) {
+			for (int i = 0; i < Tableau[f].length; i++) {
+				System.out.print(Tableau[f][i] + " ");
+			}
+			System.out.println("");
+		}
+
+}
+} 

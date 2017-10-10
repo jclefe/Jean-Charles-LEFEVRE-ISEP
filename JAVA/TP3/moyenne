@@ -17,11 +17,11 @@ public class Moyenne {
 			for (int f=0; f<nbColonnes;f++) {
 				if(Tableau[h][f]==moyenne)
 				{
-					System.out.print("ligne "+h+ " et colonne "+f);
+					System.out.print("ligne "+(h+1)+ " et colonne "+(f+1));
 					
 				}
 			}
 		}
 	}
 
-}   //il y a un probleme, ca donne pas la bonne ligne et colonne
+}   

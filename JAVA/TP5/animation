@@ -1,0 +1,44 @@
+//balle rebondissante avec vitesse initiale nulle sans perte d'energie
+import edu.princeton.cs.introcs.StdDraw;
+public class Animation {
+	public final static int X_MAX= 3;
+	public final static int Y_MAX= 2;
+	public final static float WIDTH= 0.09f;
+	public static void main(String[] args) {
+	StdDraw.setXscale(-3-WIDTH, X_MAX+WIDTH);
+	StdDraw.setYscale(-WIDTH, Y_MAX+WIDTH);
+
+		
+		double vx = 0; //vitesse initiale x
+		double y = 2; //position initiale y
+		double x = 0d;
+		double vy = 0;
+		double y1;
+		int a=1;
+		double g = 9.81d;
+		//double[] coord = new double[2];
+		double t = 5; //temps de la modelisation
+		double dt = 0.05; //t(n+1)-t(n) : intervalle de temps
+		for (int i = 0; i < (t/dt); i++) {
+			y1=y;
+			if (y1<0) {
+				a=-1;
+			}
+			if (y>2) {
+				a=1;
+			}
+			y = y+a*(- vy*dt - 0.5 * g*dt);
+			x = x + vx*dt ;
+			vy = vy +a* g*dt;
+			StdDraw.clear(StdDraw.GRAY);
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.filledCircle(x, y, WIDTH);
+			StdDraw.show(20);
+			
+		}
+		//coord[0] = x;
+		//coord[1] = y;
+		//System.out.println("x= " + coord[0] + " et y = " + coord[1]);
+		
+	}
+}

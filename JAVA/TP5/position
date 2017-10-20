@@ -1,0 +1,28 @@
+
+public class position {
+
+	public static void main(String[] args) {
+		coordo(5, 0, 0);
+	}
+
+	public static double[] coordo(int T, double v1, double v2) {
+		double vx = v1;
+		double y = 2;
+		double x = 0d;
+		double vy = v2;
+		double g = 9.81d;
+		double[] coord = new double[2];
+		double dt;
+		dt = 1.0;
+		int t = T;
+		for (int i = 0; i < (t / dt); i++) {
+			vy = vy + g * dt;
+			y = y - vy * dt - (1.0 / 2.0) * g * dt; //bien penser a mettre 1.0 et 2.0 sinon ca nous rend un int arrondi a 0
+			x = x + vx * dt;
+		}
+		coord[0] = x;
+		coord[1] = y;
+		System.out.println("x= " + coord[0] + " et y = " + coord[1]);
+		return coord;
+	}
+}

@@ -1,4 +1,5 @@
-
+// question 1 : un tableau a n lignes et deux colonnes qui representent les coordonnees x et y
+//question 2: espace cartesien
 public class position {
 
 	public static void main(String[] args) {

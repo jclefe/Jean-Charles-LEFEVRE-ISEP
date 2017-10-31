@@ -1,0 +1,30 @@
+
+public class Guitare implements Instrument {
+	//attributs
+		public int nombreCorde;
+		public String son;
+		
+	//constructeur
+		public Guitare(String vson, int vnombreCorde) {
+			this.nombreCorde = vnombreCorde;
+			this.son = vson;	
+		}
+		
+		public void jouer() {
+			for (int i=0;i<nombreCorde;i++) {
+				System.out.print(son + " ");
+			}
+		}
+		
+		public void disto() { //voir commentaire sur le code tableauguitare
+			System.out.print(son.toUpperCase()+"OUIIING"+ " "); 
+		} 
+		
+		/* public static void main(String []args) {
+			Guitare normale;
+			normale = new Guitare("ding",4);
+			normale.jouer();
+		}
+		*/
+	
+}

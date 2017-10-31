@@ -1,0 +1,22 @@
+	public class tableauguitare {
+	public static void main (String []args) {
+		int size = 4;
+		Guitare [] Tableau = new Guitare [size]; //creation du tableau de guitares
+		
+		for(int i=0;i<2;i++) { //dans la premiere moitie du tableau il n y a que des guitares classiques
+			Tableau[i]=new Guitare ("ding",(int) ((Math.random()*10)+1)); //le nombre de cordes de chaque guitare est aleatoire
+			Tableau[i].jouer();
+			System.out.println("");
+		} 
+		for (int j=2;j<size;j++) { //deuxieme moitie : guitares electriques
+			Tableau[j]= new GuitareElectrique("ding");
+			Tableau[j].jouer();
+			Tableau[j].disto(); //si la methode disto n est pas dans la classe guitare mais seulement dans guitare electrique disto n est pas reconnu
+			Tableau[j].jouer();
+			System.out.println("");
+		}
+	}
+
+}
+// Le programme fonctionne si on melange les guitares avec les guitares electriques car une guitare electrique est une guitare
+//on appelle ca : polymorphisme

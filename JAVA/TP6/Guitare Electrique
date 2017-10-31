@@ -1,0 +1,19 @@
+public class GuitareElectrique extends Guitare{
+	String son;
+	public GuitareElectrique(String vSon) {
+		super(vSon.toUpperCase(),(int) ((Math.random()*10)+1));
+		this.son = vSon;
+	}
+	
+	public static void main(String []args) {
+		GuitareElectrique elec = new GuitareElectrique("ding");
+		elec.jouer();
+		elec.disto();
+		elec.jouer();
+		}
+	
+	public void disto() {
+		System.out.print(son.toUpperCase()+"OUIIING"+ " ");
+	}
+	
+}

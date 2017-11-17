@@ -1,0 +1,57 @@
+public class Pile<T> {
+	private T data;
+	private Pile<T> next;
+
+	public Pile() {
+		data= null;
+		next = null;
+	}
+	private Pile(T data, Pile<T> next){ //constructeur 
+		this.data = data;
+		this.next = next;
+	}
+	
+	public void push(T data){
+		Pile newPile = newPile(data,this.next); //qd on push, on deplace notre next au dessus de la pile pour qu il pointe notre nvelle valeur
+		this.next = newPile; //dans notre meme pile on a deplace le next pour qu il pointe vers notre nvel element 
+		//this.next = newPile : notre nouveau next devient newPile qui lui est l ancien next avec data en plus
+	}
+
+	
+	public T peek(){
+		if (next ==null) return null;
+		return next.data;
+	}
+	public T pop(){
+		if (next ==null) return null;
+		T out = next.data;  //on le stocke dans une autre variable sinon on le perd
+		this.next = next.next;
+		return out; //car si on return next.data ca nous aurait pas donne le dernier element qu on a retire mais le dernier element de la nouvelle pile
+		
+	}
+	public int count(){
+		/*if (next==null) {
+			return 0;
+		}
+		else {
+			return 1+next.count();  // version recursive 
+		} */
+		Pile<T> tempNext = next; 
+		int count = 0;
+		while (tempNext != null ) {
+			tempNext =tempNext.next;
+			count++;
+		}
+		return count //version iterative
+	}
+	
+	
+	
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

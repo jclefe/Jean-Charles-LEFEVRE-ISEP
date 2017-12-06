@@ -1,0 +1,26 @@
+public class Arbre {
+	public String value; 
+	public Arbre SousArbreGauche;
+	public Arbre SousArbreDroit;
+	public Arbre Parent;
+	
+	public Arbre(String vSommet) {
+		this.value = vSommet;
+	}
+	
+	public Arbre(String vSommet, Arbre leftson, Arbre rightson, Arbre Sommet) {
+		this.value = vSommet;
+		this.Parent = Sommet;
+		this.SousArbreGauche = leftson;
+		this.SousArbreDroit = rightson;
+		SousArbreDroit.Parent = Sommet;
+		SousArbreGauche.Parent = Sommet;
+	}
+	
+	
+
+	
+	public static void main(String[] args) {
+	}
+
+}

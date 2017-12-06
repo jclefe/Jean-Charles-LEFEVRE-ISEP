@@ -1,0 +1,107 @@
+import java.util.ArrayList;
+import java.util.List;
+public class Main {
+
+	public static void main(String[] args) {
+	/*	Arbre B = new Arbre("B");
+		Arbre C = new Arbre("C");
+		Arbre A = new Arbre("A",B,C); */ 					//Question 2 Structure de données
+		
+	//Creation d'un arbre complexe
+		Arbre A = new Arbre("A");
+		Arbre B = new Arbre("B");
+		Arbre C = new Arbre("C");
+		Arbre D = new Arbre("D");
+		Arbre E = new Arbre("E");
+		Arbre F = new Arbre("F");
+		Arbre G = new Arbre("G");
+		Arbre H = new Arbre("H");
+		Arbre I = new Arbre("I");
+		Arbre J = new Arbre("J");
+	//On definit ici qui est le parent et le sous arbre	
+		D.SousArbreGauche=F;
+		F.Parent = D;
+		D.SousArbreDroit=G;
+		G.Parent = D;
+		B.SousArbreGauche=D;
+		D.Parent = B;
+		B.SousArbreDroit=E;
+		E.Parent = B;
+		A.SousArbreGauche=B;
+		B.Parent = A;
+		A.SousArbreDroit=C;
+		C.Parent = A;
+		C.SousArbreDroit=H;
+		H.Parent = C;
+		E.SousArbreDroit = I;
+		I.Parent = E;
+		I.SousArbreGauche = J;
+		J.Parent = I;
+		
+		System.out.print("Parcours prefixe : ");
+		ParcoursPrefixe(A);
+		System.out.println("");
+		System.out.print("Derniers descendants : ");
+		DerniersDescendants(A);
+		for (int i=0;i<ListFeuilles.size();i++) { 
+		System.out.print((ListFeuilles.get(i)).value + " "); }
+		System.out.println("");
+		System.out.print("La profondeur de l'arbre est ");
+		Profondeur(DerniersDescendants(A));		
+	}
+	
+	public static void ParcoursPrefixe(Arbre arbre1) {
+		System.out.print(arbre1.value+" ");
+		if (arbre1.SousArbreGauche != null) {
+			ParcoursPrefixe(arbre1.SousArbreGauche);
+		}
+		if (arbre1.SousArbreDroit != null) {
+			ParcoursPrefixe(arbre1.SousArbreDroit);
+		}
+	}
+	
+	
+	public static ArrayList<Arbre> ListFeuilles = new ArrayList<>() ;	//Tous les derniers descendants seront stockés dans cette liste		
+	
+	public static ArrayList DerniersDescendants(Arbre arbre1) { 				
+		if (arbre1.SousArbreGauche == null && arbre1.SousArbreDroit == null){
+			ListFeuilles.add(arbre1);
+		}
+		
+		if (arbre1.SousArbreGauche != null || arbre1.SousArbreDroit != null){	
+			if(arbre1.SousArbreGauche != null) {DerniersDescendants(arbre1.SousArbreGauche);}
+			if(arbre1.SousArbreDroit != null) {DerniersDescendants(arbre1.SousArbreDroit);}
+		}
+		return ListFeuilles;
+	}
+	
+//Pour calculer la profondeur de l'arbre, on part de tous les derniers descendants et on remonte jusqu'au sommet en comptant 
+//la profondeur correspond au chemin le plus long pour remonter du dernier descendant au sommet	
+	public static int Profondeur(ArrayList<Arbre> descendants) {
+		Arbre intermediaire;
+		int a = descendants.size();
+		int max;
+		int [] comptage = new int [a]; //Chaque case du tableau correspondant à un descendant distinct et c'est dans cette case qu'on 
+									   //incrémente le nombre d'etages pour remonter jusqu'au sommet
+		for (int j=0;j<a;j++) {
+			comptage[j]=0; //on initialise le tableau à 0
+		}
+		for (int i=0;i<descendants.size();i++) {
+			intermediaire = (descendants.get(i)).Parent; 
+			while (intermediaire != null) { 
+				comptage[i]+=1;
+				intermediaire = intermediaire.Parent;
+			}
+		}
+		max = comptage[0];
+		for (int j=1;j<a;j++) { //on détermine ici le maximum du tableau qui correspond a la profondeur de l'arbre
+			if (comptage[j]>max) {
+				max = comptage[j];
+			}
+		}
+		System.out.println(max);
+		return max;
+	}
+	
+	
+}

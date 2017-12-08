@@ -35,6 +35,22 @@ public class Dictionnaire {
 		return false;
 	}
 	
+		public String choose()
+	{
+		Path test = Paths.get("D:\\Utilities\\Eclipse\\Workspace\\TP10", this.nom); // Le chemin d'accès varie selon
+		Charset charset = Charset.forName("ISO-8859-1");							// le pc
+		
+		try {
+			List<String> lines = Files.readAllLines(test, charset);
+			String res = lines.get((int) (Math.random()*lines.size()));
+			System.out.println(res);
+			return res;
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return "Error";
+	}
+	
 	public static void main(String[] args)
 	{
 		Dictionnaire test = new Dictionnaire("dictionnaire.txt");

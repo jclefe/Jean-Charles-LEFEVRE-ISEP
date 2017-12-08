@@ -1,0 +1,61 @@
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.util.List;
+
+public class Dictionnaire {
+	
+	public String nom; 
+	
+	public Dictionnaire(String vnom){
+		this.nom = vnom;
+	}
+	
+	public boolean find(String word) {
+		Path test1 = Paths.get("C:\\Users\\Utili\\eclipse-workspace\\TP10", this.nom);
+		Charset charset = Charset.forName("ISO-8859-1");							
+		
+		try {
+			List<String> lines = Files.readAllLines(test1, charset);
+			for (String line : lines) {
+				if(word.equals(line))
+				{
+					System.out.println("Ce mot est présent dans le dictionnaire");
+					return true;
+					}
+		
+			}
+			System.out.println("Ce mot n'est pas présent dans le dictionnaire");
+			return false;
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return false;
+	}
+	
+	public String choose()
+	{
+		Path test2 = Paths.get("C:\\Users\\Utili\\eclipse-workspace\\TP10", this.nom); 
+		Charset charset = Charset.forName("ISO-8859-1");							
+		
+		try {
+			List<String> lines = Files.readAllLines(test2, charset);
+			String res = lines.get((int) (Math.random()*lines.size()));
+			System.out.println(res);
+			return res;
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return "Error";
+	}
+	
+	public static void main(String[] args) {
+		Dictionnaire test3 = new Dictionnaire("dico.txt");
+		test3.find(test3.choose());
+		
+	}
+	
+}

@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Scanner;
 
 public class Dictionnaire {
 	
@@ -44,7 +45,7 @@ public class Dictionnaire {
 		try {
 			List<String> lines = Files.readAllLines(test2, charset);
 			String res = lines.get((int) (Math.random()*lines.size()));
-			System.out.println(res);
+		//	System.out.println(res);
 			return res;
 		} catch (IOException e) {
 			System.out.println(e);
@@ -52,9 +53,44 @@ public class Dictionnaire {
 		return "Error";
 	}
 	
+	public static  void evaluer(String proposition, String mot) {
+		  String result= "";
+		     boolean lettre; 
+		     for (int i=0; i<proposition.length(); i++) {
+		      lettre=false;
+		      for (int n=0; n<mot.length(); n++) {
+		       if ( proposition.charAt(i) == mot.charAt(n)) {
+		        lettre=true;
+		        if (n==i) {
+		         result=result+"o";
+		         
+		        }
+		        else {
+		         result=result+"-";
+		         
+		         
+		        }
+		        
+		        
+		       }
+		       if (lettre==false && n==mot.length()-1) {
+		        result=result+"x";
+		       }
+		       
+		          
+		         }
+		     }
+		     
+		     System.out.print(result);
+		   
+		 }
+	
 	public static void main(String[] args) {
 		Dictionnaire test3 = new Dictionnaire("dico.txt");
-		test3.find(test3.choose());
+	//	test3.find(test3.choose());
+		Scanner scan = new Scanner(System.in);
+		String prop = scan.nextLine();
+		evaluer(prop,test3.choose());
 		
 	}
 	

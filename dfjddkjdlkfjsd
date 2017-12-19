@@ -1,0 +1,130 @@
+import edu.princeton.cs.introcs.StdDraw;
+import java.awt.event.KeyEvent; 
+public class ttt {
+	public final static double LARGEUR = 6;
+	public final static double HAUTEUR = 6;
+	public final static double Xmin = -5;
+	public final static double Xmax = 3;
+	public final static double Ymin = -3;
+	public final static double Ymax = 3+0.8;
+	
+	//Il y a entre 18 et 27 niveaux 
+	//Faut faire attention, lesjoueurs choppent les coffres en dessous d'eux maintenant
+	//Regler le dernier coffre qui est trop bas
+	//faire baisser l'oxygene en fonction des actions
+	
+	public static void main(String[] args) throws InterruptedException{
+		StdDraw.setCanvasSize(720, 670);
+		double position_joueur1=3.1;
+		double position_joueur2=3.1;
+		int nb_niveau=27;
+		double pas = HAUTEUR/nb_niveau; //Voir la hauteur reelle de l'image fond marin
+		int position1=0; //permet de connaitre la position du joueur1 pour degager les coffres correspondants
+		int position2=0; 
+		double [] Tab_coffres = new double [nb_niveau];
+		int nbOx = 2*nb_niveau; 
+		int a = 1;
+		
+		StdDraw.setXscale(Xmin,Xmax);
+		StdDraw.setYscale(Ymin,Ymax);
+		
+		for (int i=0;i<Tab_coffres.length;i++){ 
+			Tab_coffres[i]=1;}
+
+		while(true) {
+			StdDraw.picture(0, 0, "fondmarin.jpg",LARGEUR, HAUTEUR);
+			
+			//Rectangle bois sur le cote
+			StdDraw.picture(-4, 0, "arriere_plan.jpg",2,HAUTEUR+0.8);
+		
+			//Rectangle pour la plage
+			StdDraw.picture(0, Ymax-0.7, "plage.jpg",LARGEUR, 0.6);
+			
+			//Rectangle sable de l'oxygene
+			StdDraw.picture(Xmax - (Xmax-Xmin)/2 , Ymax-0.2 , "sable.jpg",Xmax-Xmin, 0.4);
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.text(-4.3,3.6,"Oxygene :");
+			
+				//contour pr le rectangle d'oxygene
+			StdDraw.rectangle(-0.5, 3.6, 3.3, 0.1);//contour pour le rectangle d'oxygene
+				
+				//mettre les barres d'oxygene
+			for (int i=0;i<nbOx;i++) {	
+				StdDraw.filledRectangle( ( (-0.5+3.3)-(3.3/nbOx) ) -i *2*(3.3/nbOx) , Ymax-0.2 , 0.9*3.3/nbOx , 0.08);}
+			
+		
+			
+			
+			if (a==1) {
+				if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN)) {
+					position_joueur1-=pas; 
+					Thread.sleep(200);  //met le programme en pause pendant 200ms
+					position1+=1; //il ne s'agit pas de la position reelle mais de celle ds le tableau pour effacer le bon coffre
+					a=-a;
+					}
+				if (StdDraw.isKeyPressed(KeyEvent.VK_UP)) {
+					position_joueur1+=pas; 
+					Thread.sleep(200);
+					position1-=1;
+					a=-a;
+					}
+				if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
+						if (Tab_coffres[position1]==0) { //pour obliger le joueur a faire une action et pas appuyer sur espace qd y a rien
+						Thread.sleep(200); 
+						}
+						else {
+							Tab_coffres[position1]=0;Thread.sleep(200); a=-a;}
+				} 
+				StdDraw.picture(-1, position_joueur1, "plongeur_final.png",0.5,0.5);
+				StdDraw.setPenColor(StdDraw.RED);
+				StdDraw.text(-1, position_joueur1-0.5,"Player 1");
+				StdDraw.picture(1, position_joueur2, "plongeur_final.png",0.5,0.5);
+				StdDraw.setPenColor(StdDraw.BLACK);
+				StdDraw.text(1, position_joueur2-0.5,"Player 2");
+
+				for (int i=0;i<Tab_coffres.length;i++) { 
+					if (Tab_coffres[i]==1) {
+						StdDraw.picture(0, (3-0.3-(pas*i)), "tresor.png",0.2,0.2);
+					}
+					}
+				
+				StdDraw.show(20);
+				}
+			if (a==-1) {
+				if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN)) {
+					position_joueur2-= pas; 
+					Thread.sleep(200); 
+					position2+=1;
+					a=1;
+					}
+				if (StdDraw.isKeyPressed(KeyEvent.VK_UP)) {
+					position_joueur2+= pas; 
+					Thread.sleep(200); 
+					position2-=1;
+					a=1;
+					}
+				if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
+					if (Tab_coffres[position2]==0) {
+					Thread.sleep(200); 
+					}
+					else {Tab_coffres[position2]=0;Thread.sleep(200); a=-a;}
+				}
+				StdDraw.picture(-1, position_joueur1, "plongeur_final.png",0.5,0.5);
+				StdDraw.setPenColor();
+				StdDraw.setPenColor(StdDraw.BLACK);
+				StdDraw.text(-1, position_joueur1-0.5,"Player 1");
+				StdDraw.picture(1, position_joueur2, "plongeur_final.png",0.5,0.5);
+				StdDraw.setPenColor(StdDraw.RED);
+				StdDraw.text(1, position_joueur2-0.5,"Player 2");
+				for (int i=0;i<Tab_coffres.length;i++) {
+					if (Tab_coffres[i]==1) {
+					StdDraw.picture(0, (3-0.3 -(pas*i)), "tresor.png",0.2,0.2);
+					}
+					}	
+				StdDraw.show(20);
+				}
+		}
+		
+		
+	}
+}

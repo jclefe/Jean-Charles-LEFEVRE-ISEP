@@ -1,0 +1,16 @@
+
+public class Ferry {
+	public String name;
+	public int max_emplacements;
+	public int max_passagers;
+	
+	public Ferry(String vnom, int maxe, int maxp) {
+		this.name = vnom;
+		this.max_emplacements = maxe;
+		this.max_passagers = maxp;
+	}
+	
+	public static void main(String[] args) {
+	}
+
+}

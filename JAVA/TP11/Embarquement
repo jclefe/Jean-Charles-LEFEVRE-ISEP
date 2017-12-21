@@ -1,0 +1,33 @@
+import java.util.List;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+
+public class Embarquement {
+
+	public static void main(String[] args) {
+		Path test1 = Paths.get("C:\\Users\\Utili\\eclipse-workspace\\TP11", "ferry.txt");
+		Charset charset = Charset.forName("ISO-8859-1");						
+
+		try {
+			List<String> lines = Files.readAllLines(test1, charset);
+			String a = lines.get(0);
+			System.out.println(a);
+			String [] mot = a.split(" ");
+			System.out.println(mot[0]);
+			 int c =  Integer.parseInt(mot[1]); 
+			 int d =  Integer.parseInt(mot[2]); 
+	/*		for (String b : mot) {
+				System.out.println(b);
+			}*/
+			Ferry A = new Ferry(mot[0], c, d);
+			System.out.print(A.name);
+		
+		} 
+		catch (IOException e) {System.out.println(e);} 
+		
+	}
+} 
+

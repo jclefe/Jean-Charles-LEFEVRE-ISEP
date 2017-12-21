@@ -1,0 +1,8 @@
+public class Bus extends Vehicule {
+	public Bus(int a, int b) {
+		super(a,b);
+	}
+
+}
+
+

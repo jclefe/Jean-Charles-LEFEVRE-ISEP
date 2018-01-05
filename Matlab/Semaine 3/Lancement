@@ -1,0 +1,169 @@
+import java.awt.event.KeyEvent;
+import edu.princeton.cs.introcs.StdDraw;
+
+public class Lancement {
+	public static int test = 0;//variable qui determine si on joue en multi ou single player
+	
+	
+	public static void lancer() throws InterruptedException{
+		StdDraw.setCanvasSize(720, 670); //pour aggrandir ou elargir la fenetre
+		StdDraw.setXscale(Phase.Xmin,Phase.Xmax); //permet de savoir de ou a ou on va
+		StdDraw.setYscale(Phase.Ymin,Phase.Ymax);
+		StdDraw.picture(-1, 1, "ecran.jpg",Phase.LARGEUR+2,Phase.HAUTEUR+2);
+		StdDraw.picture(-1, 2, "image.png",4,2);
+		StdDraw.picture(-3, -1.5, "parechemin.png",3,1);
+		StdDraw.picture(1, -1.5, "parechemin.png",3,1);
+		StdDraw.picture(-3, -1.6, "single.png",2,0.5);
+		StdDraw.picture(1, -1.6, "multi.png",2,0.5);
+		while(true) {
+		if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT)) {
+			StdDraw.picture(-3, -1.5, "parechemin.png",3,1);
+			StdDraw.picture(1, -1.5, "parechemin.png",3,1);
+			StdDraw.picture(-3, -1.6, "singleR.png",2,0.5);
+			StdDraw.picture(1, -1.6, "multi.png",2,0.5);
+			test=1;
+			Thread.sleep(200);
+			}
+		if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT)) {
+			StdDraw.picture(-3, -1.5, "parechemin.png",3,1);
+			StdDraw.picture(1, -1.5, "parechemin.png",3,1);
+			StdDraw.picture(-3, -1.6, "single.png",2,0.5);
+			StdDraw.picture(1, -1.6, "multiR.png",2,0.5);
+			test=2;
+			Thread.sleep(200);
+			}
+		StdDraw.show(20);
+		if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
+			Thread.sleep(200);
+			//single player
+			if (test==1) {
+				Phase.tour_multi();
+				InGame.annonceFinDePhase(Phase.A,Phase.B);
+				Phase.phase++;
+				int tes = 1;
+				while(tes==1) {
+					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
+						Thread.sleep(200);
+						Phase.A.score_provisoire = 0;
+						Phase.B.score_provisoire = 0;
+						Phase.A.position = 3.1;
+						Phase.B.position = 3.1;
+						Phase.A.pos_tab = -1;
+						Phase.A.nb_tresor = 0;
+						Phase.A.game=1;
+						Phase.B.pos_tab = -1;
+						Phase.B.nb_tresor = 0;
+						Phase.B.game=0;
+						Phase.A.Intermediaire.addAll(Phase.A.coffreBas);
+						Phase.B.Intermediaire.addAll(Phase.B.coffreBas);
+						Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
+						while(!(Phase.A.coffreBas.isEmpty())) {
+							Phase.A.coffreBas.remove(0);
+						}
+						while(!(Phase.B.coffreBas.isEmpty())) {
+							Phase.B.coffreBas.remove(0);
+						}
+						Phase.tour_multi();
+						InGame.annonceFinDePhase(Phase.A,Phase.B);
+						Phase.phase++;
+						tes=2;
+					}
+				}
+				while(tes==2) {
+					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
+						Thread.sleep(200);
+						Phase.A.score_provisoire = 0;
+						Phase.B.score_provisoire = 0;
+						Phase.A.position = 3.1;
+						Phase.B.position = 3.1;
+						Phase.A.pos_tab = -1;
+						Phase.A.nb_tresor = 0;
+						Phase.A.game=1;
+						Phase.B.pos_tab = -1;
+						Phase.B.nb_tresor = 0;
+						Phase.B.game=0;
+						Phase.A.Intermediaire.addAll(Phase.A.coffreBas);
+						Phase.B.Intermediaire.addAll(Phase.B.coffreBas);
+						Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
+						while(!(Phase.A.coffreBas.isEmpty())) {
+							Phase.A.coffreBas.remove(0);
+						}
+						while(!(Phase.B.coffreBas.isEmpty())) {
+							Phase.B.coffreBas.remove(0);
+						}
+						Phase.tour_multi();
+						InGame.annonceFinDeJeu(Phase.A,Phase.B);
+						tes=0;
+					}
+				}
+			}
+			//multiplayer
+			if (test==2) {
+				Phase.tour_multi();
+				InGame.annonceFinDePhase(Phase.A,Phase.B);
+				Phase.phase++;
+				int tes = 1;
+				while(tes==1) {
+					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
+						Thread.sleep(200);
+						Phase.A.score_provisoire = 0;
+						Phase.B.score_provisoire = 0;
+						Phase.A.position = 3.1;
+						Phase.B.position = 3.1;
+						Phase.A.pos_tab = -1;
+						Phase.A.nb_tresor = 0;
+						Phase.A.game=1;
+						Phase.B.pos_tab = -1;
+						Phase.B.nb_tresor = 0;
+						Phase.B.game=0;
+						Phase.A.Intermediaire.addAll(Phase.A.coffreBas);
+						Phase.B.Intermediaire.addAll(Phase.B.coffreBas);
+						Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
+						while(!(Phase.A.coffreBas.isEmpty())) {
+							Phase.A.coffreBas.remove(0);
+						}
+						while(!(Phase.B.coffreBas.isEmpty())) {
+							Phase.B.coffreBas.remove(0);
+						}
+						Phase.tour_multi();
+						InGame.annonceFinDePhase(Phase.A,Phase.B);
+						Phase.phase++;
+						tes=2;
+					}
+				}
+				while(tes==2) {
+					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
+						Thread.sleep(200);
+						Phase.A.score_provisoire = 0;
+						Phase.B.score_provisoire = 0;
+						Phase.A.position = 3.1;
+						Phase.B.position = 3.1;
+						Phase.A.pos_tab = -1;
+						Phase.A.nb_tresor = 0;
+						Phase.A.game=1;
+						Phase.B.pos_tab = -1;
+						Phase.B.nb_tresor = 0;
+						Phase.B.game=0;
+						Phase.A.Intermediaire.addAll(Phase.A.coffreBas);
+						Phase.B.Intermediaire.addAll(Phase.B.coffreBas);
+						Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
+						while(!(Phase.A.coffreBas.isEmpty())) {
+							Phase.A.coffreBas.remove(0);
+						}
+						while(!(Phase.B.coffreBas.isEmpty())) {
+							Phase.B.coffreBas.remove(0);
+						}
+						Phase.tour_multi();
+						InGame.annonceFinDeJeu(Phase.A,Phase.B);
+						tes=0;
+					}
+				}
+			}
+			}
+	}
+	}
+	
+	public static void main(String[] args) throws InterruptedException{
+		lancer();
+	}
+}

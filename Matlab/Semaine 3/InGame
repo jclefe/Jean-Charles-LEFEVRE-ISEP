@@ -1,0 +1,247 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
+
+import edu.princeton.cs.introcs.StdDraw;
+
+public class InGame extends MouseAdapter implements MouseListener {
+
+	public static void descendre(Joueur A,Joueur B, Oxygene F, Cave b, Cave c, Cave d, double pas) throws InterruptedException {
+		if (A.pos_tab!=b.niveaux +c.niveaux+d.niveaux-1) {
+			Joueur.descendre_joueur(A,pas);
+			F.OxVar-=(1+A.nb_tresor);
+			A.game=0;
+			B.game=1;
+			}
+	}
+	
+	public static void monter(Joueur A, Joueur B, Oxygene F, double pas) throws InterruptedException {
+		if (A.pos_tab!=-1) {
+			Joueur.monter_joueur(A,pas);
+			F.OxVar -= (1+A.nb_tresor);
+			A.game=0;
+			B.game=1;
+			}
+	}
+	
+	public static void espace(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double [] posito, Tresors [] prems, Tresors [] deuz, Tresors [] troiz) throws InterruptedException {
+		if (A.pos_tab != -1 && A.pos_tab !=(C.niveaux+D.niveaux+E.niveaux-1)) {
+			if (posito[A.pos_tab]!=0) {
+				posito[A.pos_tab]=0;
+				F.OxVar -= 1;
+				A.nb_tresor+=1;
+				//ces 3 if permettent de calculer le score du tresor recolter en fct de la position du joueur
+				if (A.pos_tab>=0 && A.pos_tab<C.niveaux) {
+					A.score_provisoire += prems[(int)(A.pos_tab)].nombre;
+					A.coffreBas.add(prems[(int)(A.pos_tab)].nombre);
+				}
+				if (A.pos_tab>=C.niveaux && A.pos_tab<C.niveaux+D.niveaux) {
+					A.score_provisoire += deuz[(int)(A.pos_tab-C.niveaux)].nombre;
+					A.coffreBas.add(deuz[(int)(A.pos_tab-C.niveaux)].nombre);
+				}
+				if (A.pos_tab>=C.niveaux+D.niveaux && A.pos_tab<C.niveaux+D.niveaux+E.niveaux) {
+					A.score_provisoire += troiz[(int)(A.pos_tab-C.niveaux-D.niveaux)].nombre;
+					A.coffreBas.add(troiz[(int)(A.pos_tab-C.niveaux-D.niveaux)].nombre);
+					
+				}
+				A.game=0;
+				B.game=1;
+			}
+		}
+		//on gere ici le cas ou le joueur est tt en bas
+		if (A.pos_tab==(C.niveaux+D.niveaux+E.niveaux-1)) {
+			if (posito[A.pos_tab]==0 && !(A.Intermediaire.isEmpty())) {
+				//prendre un des coffres de la liste qu'on a mis
+				int naha = (int) (Math.random()*(Phase.A.Intermediaire.size())); //prend un des coffres au hasard ds la liste 
+				A.score_provisoire += A.Intermediaire.get(naha); 
+				A.Intermediaire.remove(naha); //on retire cet element de la liste
+				A.game=0;
+				B.game=1;
+			}
+			
+			if (posito[A.pos_tab]!=0) {
+					posito[A.pos_tab]=0;
+					F.OxVar -= 1;
+					A.nb_tresor+=1;
+					//ces 3 if permettent de calculer le score du tresor recolter en fct de la position du joueur
+					if (A.pos_tab>=0 && A.pos_tab<C.niveaux) {
+						A.score_provisoire += prems[(int)(A.pos_tab)].nombre;
+						A.coffreBas.add(prems[(int)(A.pos_tab)].nombre);
+					}
+					if (A.pos_tab>=C.niveaux && A.pos_tab<C.niveaux+D.niveaux) {
+						A.score_provisoire += deuz[(int)(A.pos_tab-C.niveaux)].nombre;
+						A.coffreBas.add(deuz[(int)(A.pos_tab-C.niveaux)].nombre);
+					}
+					if (A.pos_tab>=C.niveaux+D.niveaux && A.pos_tab<C.niveaux+D.niveaux+E.niveaux) {
+						A.score_provisoire += troiz[(int)(A.pos_tab-C.niveaux-D.niveaux)].nombre;
+						A.coffreBas.add(troiz[(int)(A.pos_tab-C.niveaux-D.niveaux)].nombre);
+						
+					}
+					A.game=0;
+					B.game=1;
+			} 
+		}
+		
+	}
+	
+	public static void tourDeJeu(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, double[]posito, Tresors[]prems,Tresors[] deuz, Tresors[] troiz) throws InterruptedException {
+		if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN)) {
+			InGame.descendre(A,B,F,C,D,E,pas);
+			Thread.sleep(200);
+		}
+		if (StdDraw.isKeyPressed(KeyEvent.VK_UP)) {
+			InGame.monter(A,B,F,pas);
+			Thread.sleep(200); 
+		}
+		if (StdDraw.isKeyPressed(KeyEvent.VK_SPACE)) {
+			InGame.espace(A, B,F, C, D, E, posito, prems, deuz, troiz);
+			Thread.sleep(200); 
+		}
+	}
+	
+	public static void tourDeJeuIA(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, double[]posito, Tresors[]prems,Tresors[] deuz, Tresors[] troiz) throws InterruptedException {
+		int a = (int) (1+Math.random()*3);
+		if (a==1) {
+			InGame.descendre(A,B,F,C,D,E,pas);
+			Thread.sleep(200);
+		}
+		if (a==2) {
+			InGame.monter(A,B,F,pas);
+			Thread.sleep(200); 
+		}
+		if (a==3) {
+			InGame.espace(A,B,F,C, D, E, posito, prems, deuz, troiz);
+			Thread.sleep(200); 
+		}
+	}
+		
+	public static void annonceFinDePhase(Joueur A, Joueur B) {
+		for (int i=0;i<50;i++) {
+			StdDraw.picture(0, 0, "fondNoir.jpg",i*0.1,i*0.1); //au final on a 5 en largeur et en hauteur (=50*0.1)
+			StdDraw.show(20);
+		}
+		StdDraw.text(0, 2.5-0.5, "FIN DE LA PHASE");
+		StdDraw.text(0, 2.5-0.7, "(Appuyez sur entrée pour passer à la phase suivante)");
+		StdDraw.text(-2+0.8, 2.5-1.5, "Score "+A.name+" : ");
+		StdDraw.text(-2+1.8,2.5-1.5, Integer.toString(A.score));
+		StdDraw.text(-2+0.8, 2.5-2.7, "Score "+B.name+" : ");
+		StdDraw.text(-2+1.8,2.5-2.7, Integer.toString(B.score));
+		StdDraw.text(0, 2.5-3.5, "VAINQUEUR TEMPORAIRE : ");
+		if (A.score>B.score) {
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.text(0, 2.5-3.8, A.name);
+		}
+		if (A.score<B.score) {
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.text(0, 2.5-3.8, B.name);
+		}
+		if (A.score==B.score){
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.text(0,2.5-3.8,"Egalité");
+		}
+		StdDraw.show(20);
+	}
+	
+	public static void annonceFinDeJeu(Joueur A, Joueur B) throws InterruptedException{
+		for (int i=0;i<50;i++) {
+			StdDraw.picture(0, 0, "fondNoir.jpg",i*0.1,i*0.1); //au final on a 5 en largeur et en hauteur (=50*0.1)
+			StdDraw.show(20);
+		}
+		StdDraw.text(0, 2.5-0.5, "FIN DU JEU");
+		StdDraw.text(-2+0.8, 2.5-1.3, "Score "+A.name+" : ");
+		StdDraw.text(-2+1.8,2.5-1.3, Integer.toString(A.score));
+		StdDraw.text(-2+0.8, 2.5-1.8, "Score "+B.name+" : ");
+		StdDraw.text(-2+1.8,2.5-1.8, Integer.toString(B.score));
+		StdDraw.text(0, 2.5-2.5, "GRAND VAINQUEUR : ");
+		if (A.score>B.score) {
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.text(0, 2.5-2.8, A.name);
+		}
+		if (A.score<B.score) {
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.text(0, 2.5-2.8, B.name);
+		}
+		if (A.score==B.score){
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.text(0,2.5-2.8,"Egalité");
+		}
+		StdDraw.picture(-1.2, -1.5, "rejouer.png",0.8,0.4);
+		StdDraw.picture(1.2, -1.5, "quitter.png",0.8,0.4);
+		StdDraw.show(20);
+		while(true) {
+			double pox;
+			double poy;
+			if (StdDraw.isMousePressed()) {
+				pox = StdDraw.mouseX();
+				poy =StdDraw.mouseY();
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			if (pox>=0.85 && pox<=1.65 && poy>=-1.74 && poy<=-1.34) {
+			//	Animation qui apparait quand on a clique le bouton quitter
+				for (int i=0;i<100;i++) {
+				StdDraw.picture(-1, 100-i, "voletFerme.jpg",8,8);
+				StdDraw.show(20);
+				}
+				
+			}
+			if (pox>=-1.53 && pox<=-0.76 && poy>=-1.74 && poy<=-1.34) {
+			//	Pour rejouer
+				A.score_provisoire = 0;
+				B.score_provisoire = 0;
+				A.position = 3.1;
+				B.position = 3.1;
+				A.pos_tab = -1;
+				A.nb_tresor = 0;
+				A.game=1;
+				B.pos_tab = -1;
+				B.nb_tresor = 0;
+				B.game=0;
+				Phase.phase =1;
+				A.score =0;
+				B.score =0;
+				Phase.C= new Cave(1);
+				Phase.D = new Cave(2);
+				Phase.E = new Cave(3);
+				Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
+				Phase.posito = new double [(int) (Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux)];
+				Phase.pas = (Phase.HAUTEUR-0.2)/(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
+				Phase.prems = new Tresors [(int) Phase.C.niveaux];
+				Phase.deuz = new Tresors [(int) Phase.D.niveaux];
+				Phase.troiz = new Tresors [(int) Phase.E.niveaux];
+				while(!(A.coffreBas.isEmpty())) {
+					A.coffreBas.remove(0);
+				}
+				while(!(B.coffreBas.isEmpty())) {
+					B.coffreBas.remove(0);
+				}
+				while(!(A.Intermediaire.isEmpty())) {
+					A.Intermediaire.remove(0);
+				}
+				while(!(B.Intermediaire.isEmpty())) {
+					B.Intermediaire.remove(0);
+				}
+				Lancement.test=0;
+				Lancement.lancer();
+			}
+			}
+		}
+		
+	}
+
+	
+	
+	public static void main(String[] args) {
+		StdDraw.setCanvasSize(720, 670);
+		StdDraw.setXscale(Phase.Xmin,Phase.Xmax);
+		StdDraw.setYscale(Phase.Ymin,Phase.Ymax);
+		try {
+			annonceFinDeJeu(Phase.A, Phase.B);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}

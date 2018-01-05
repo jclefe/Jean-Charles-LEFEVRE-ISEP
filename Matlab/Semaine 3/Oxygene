@@ -1,0 +1,25 @@
+import edu.princeton.cs.introcs.StdDraw;
+
+public class Oxygene {
+	public final static double Ymax = 3+0.8;
+	public static double nbOx;
+	public static double OxVar;
+	
+	public Oxygene(double niv) {
+		this.nbOx= 2*niv;
+		this.OxVar = 2*niv;
+	}
+
+	//mettre les barres d'oxygene
+	public static double afficher_ox(double a) { 
+		for (int i=0;i<a;i++) {	
+			StdDraw.setPenColor(StdDraw.BLUE);
+			StdDraw.filledRectangle( ( (-0.5+3.3)-(3.3/nbOx) ) -i *2*(3.3/nbOx) , Ymax-0.2 , 0.9*3.3/nbOx , 0.08);
+			}
+		StdDraw.setPenColor(StdDraw.WHITE);
+		return a;
+	}
+	
+	public static void main(String[] args) {
+	}
+}

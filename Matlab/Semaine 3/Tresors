@@ -1,0 +1,34 @@
+import edu.princeton.cs.introcs.StdDraw;
+
+public class Tresors {
+//cave 1 : 1 à 3 trésors
+//cave 2 : 5 à 8 trésors
+//cave 3 : 10 à 12 trésors
+	
+	public int nombre;
+	
+	public Tresors(Cave a) {
+		if(a.nb == 1) {
+			this.nombre = 1+ (int) (Math.random()*(3-0));
+		}
+		if(a.nb == 2) {
+			this.nombre = 5+ (int) (Math.random()*(8-4));
+		}
+		if(a.nb == 3) {
+			this.nombre = 10+ (int) (Math.random()*(12-9));
+		}
+	}
+	
+	public static void afficher_coffres(double position_y) {
+		StdDraw.picture(0, (3 -position_y), "tresor.png",0.2,0.2);
+	}
+	
+	public static void afficher_coffres_dernier(double position_x) {
+		StdDraw.picture(position_x, 3-Phase.pas*(Phase.C.niveaux+Phase.D.niveaux+Phase.E.niveaux), "tresor.png",0.2,0.2);
+	}
+	
+	
+	
+	public static void main(String[] args) {
+	}
+}

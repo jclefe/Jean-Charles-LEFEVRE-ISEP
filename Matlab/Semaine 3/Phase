@@ -1,0 +1,164 @@
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
+import edu.princeton.cs.introcs.StdDraw;
+
+//faire commencer le joueur le plus bas en premier (en cas d'egalité de profondeur : le premier est designe aleatoirement)! ON PEUT USE UNE BOUCLE FOR????????
+//faire tomber tous les coffres en bas qd il y a plus d'oxygene
+//musique de fond (si j'ai le temps)
+//exporter en JAR
+
+//pb qd en phase 2 on choppe un coffre de la liste mais qu'on remonte pas a tps, il disparait ds la phase 3. 
+//ca vient de A.Intermediaire.remove(naha) ds game
+
+//Solution : une liste intermediaire2 qui ajoute les élements qu'on remove de la liste intermediaire, cette liste intermediaire2 
+//revient a 0 quand le joueur remonte a la surface
+//en passant a la phase suivant on fait un intermediaire.addall(intermediaire2) et theoriquement ca devrait marcher
+
+//il reste un coffre a droite et a gauche qd on passe de single a multi ou encore de multi a multi : PROBLEME !!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+public class Phase {
+
+	public final static double LARGEUR = 6;
+	public final static double HAUTEUR = 6;
+	public final static double Xmin = -5;
+	public final static double Xmax = 3;
+	public final static double Ymin = -3;
+	public final static double Ymax = 3+0.8;
+	public static int phase =1;
+	public static ArrayList<Integer> G = new ArrayList<>();
+	public static ArrayList<Integer> K = new ArrayList<>();
+	public static ArrayList<Integer> IntermediaireA = new ArrayList<>();
+	public static ArrayList<Integer> IntermediaireB = new ArrayList<>();
+	public static Joueur A = new Joueur ("Player 1",3.1,0,0,-1,0,1,G,IntermediaireA);
+	public static Joueur B = new Joueur("Player 2",3.1,0,0,-1,0,0,K,IntermediaireB);
+	public static Cave C = new Cave(1);
+	public static Cave D = new Cave(2);
+	public static Cave E = new Cave(3);
+	//On crée les trésors dans 3 tableaux différents qui correspondent au 3 caves différentes
+	public static Tresors [] prems = new Tresors [(int) C.niveaux];
+	public static Tresors [] deuz = new Tresors [(int) D.niveaux];
+	public static Tresors [] troiz = new Tresors [(int) E.niveaux];
+	//On cree le tableau posito pour faire disparaitre les coffres qd on appuie sur espace
+	public static double [] posito = new double [(int) (C.niveaux +D.niveaux+E.niveaux)];
+	public static double pas = (HAUTEUR-0.2)/(C.niveaux +D.niveaux+E.niveaux);
+	public static Oxygene F = new Oxygene(C.niveaux +D.niveaux+E.niveaux);
+	
+	
+	public static void tour_multi() throws InterruptedException {
+		//notre réserve d'oxygene se regenere a chaque nouveau tour
+//	Oxygene F = new Oxygene(C.niveaux +D.niveaux+E.niveaux); //la réserve d'oxygene est egale a 2x le nb de niveaux
+	
+
+	
+		//On remplit le tableau de trésor uniquement lors de la premiere phase car les coffres restent pour les 2 autres phases
+	if (phase==1) {
+		for (int i=0;i<C.niveaux;i++) {
+			prems[i] = new Tresors(C);
+		}
+		for (int i=0;i<D.niveaux;i++) {
+			deuz[i] = new Tresors(D);
+		}
+		for (int i=0;i<E.niveaux;i++) {
+			troiz[i] = new Tresors(E);
+		}
+	}
+	
+	//on initialise tout le tableau posito a 1 pour faire apparaitre tous les coffres (uniquement en phase 1)
+	if (phase==1) {
+		for (int i=0;i<C.niveaux +D.niveaux+E.niveaux;i++) {
+			posito[i]=1;
+		}
+	}
+	StdDraw.setCanvasSize(720, 670);
+	StdDraw.setXscale(Xmin,Xmax);
+	StdDraw.setYscale(Ymin,Ymax);
+	Graphe.afficher_tableau(A, B);
+	
+	//while(true) {
+	/*long t= System.currentTimeMillis();
+	long end = t+30000;
+	while(System.currentTimeMillis() < end) { */
+	
+	while(F.OxVar>0) { //condition d'arret qd il y a plus d'oxyg
+		Graphe.afficher_fond();
+		
+		//afficher les coffres qu'on a pas pu remonter a temps a la surface
+			for (int i=0;i<A.Intermediaire.size();i++) {
+				Tresors.afficher_coffres_dernier(-(0.25+0.25*i));
+			}
+			for (int i=0;i<B.Intermediaire.size();i++) {
+				Tresors.afficher_coffres_dernier(0.25+0.25*i); 
+			}
+		
+		if (A.pos_tab==-1) {//permet de deposer les coffres quand on est a la surface
+			A.score=A.score+A.score_provisoire; //score_provisoire revient a 0 si le joueur n est pas remonté a tps a la surface
+			A.score_provisoire=0;
+			Graphe.afficher_tableau(A, B);
+			A.nb_tresor=0;
+			for (int i=0;i<A.coffreBas.size();i++) {//concerne uniquement la derniere ligne
+				A.coffreBas.remove(i);
+			}
+		}
+		if (B.pos_tab==-1) {//pareil pour le joueur 2
+			B.score=B.score+B.score_provisoire;
+			B.score_provisoire=0;
+			Graphe.afficher_tableau(A, B);
+			B.nb_tresor=0;
+			for (int i=0;i<B.coffreBas.size();i++) {
+				B.coffreBas.remove(i);
+			}
+		}
+		double b = pas;
+		//affiche les coffres qui n'ont pas encore été choppé
+		for (int i=0;i<(C.niveaux +D.niveaux+E.niveaux);i++) {
+			if (posito[i]!=0) {
+				Tresors.afficher_coffres(b);
+				}
+			b+=pas;
+			}
+	
+		if (A.game==1) {//qd c'est tour de A de jouer (dc espace, descendre ou monter)
+			InGame.tourDeJeu(A,B,F,C,D,E,pas,posito,prems,deuz,troiz);
+		}
+		if (B.game ==1){ 
+			if(Lancement.test==2) {
+				InGame.tourDeJeu(B,A, F,C,D,E,pas,posito,prems,deuz,troiz);
+			}
+			if(Lancement.test==1) {
+				InGame.tourDeJeuIA(B,A,F,C,D,E,pas,posito,prems,deuz,troiz);
+			}
+		}
+		
+		
+		if (A.game==1) {//permet d'afficher en rouge celui qui doit jouer
+			StdDraw.picture(-1, A.position-0.4, "player1R.png",0.7,0.15);
+			StdDraw.picture(1, B.position-0.4, "player2.png",0.7,0.15);
+			}
+		if (B.game==1) {//idem
+			StdDraw.picture(-1, A.position-0.4, "player1.png",0.7,0.15);
+			StdDraw.picture(1, B.position-0.4, "player2R.png",0.7,0.15);
+			}
+		//affiche les plongeurs et l'oxygene restant
+		A.afficher_joueur(A.position, -1);
+		B.afficher_joueur(B.position,1);
+		Oxygene.afficher_ox(F.OxVar);
+		
+			//Pour afficher Cave 1.. sur le cote avec les lignes qui les separent
+			//y= 2.7 correspond a ce qu'on soit juste en dessous de la plage et y=-2.9 correspond a tout en bas
+		StdDraw.line( -3,  2.85-(C.niveaux*pas),  3,  2.85-(C.niveaux*pas));
+		StdDraw.text(2.5, (2.7+(2.85-(C.niveaux*pas)))/2, "Cave 1");
+		StdDraw.text(2.5, (2.85-(C.niveaux*pas)+2.85-(C.niveaux+D.niveaux)*pas)/2, "Cave 2");
+		StdDraw.text(2.5, (-2.9+2.85-(C.niveaux+D.niveaux)*pas)/2, "Cave 3");
+		StdDraw.line( -3, 2.85-(C.niveaux+D.niveaux)*pas , 3 , 2.85-(C.niveaux+D.niveaux)*pas);
+		
+		StdDraw.show(20);
+		}
+	}
+	
+	public static void main(String[] args) throws InterruptedException {
+		Lancement.lancer();
+		}
+	}
+	
+

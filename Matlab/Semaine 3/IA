@@ -1,0 +1,40 @@
+import java.awt.event.KeyEvent;
+
+import edu.princeton.cs.introcs.StdDraw;
+
+public class IA {
+
+	public static void tourDeJeuIA(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, double[]posito, Tresors[]prems,Tresors[] deuz, Tresors[] troiz) throws InterruptedException {
+		int a = (int) (1+Math.random()*3);
+		if () {
+			InGame.descendre(A,B,F,C,D,E,pas);
+			Thread.sleep(200);
+		}
+		if () {
+			InGame.monter(A,B,F,pas);
+			Thread.sleep(200); 
+		}
+		if () {
+			InGame.espace(A,B,F,C, D, E, posito, prems, deuz, troiz);
+			Thread.sleep(200); 
+		}
+	}
+	
+
+	public static int evaluate() {
+		int a = Phase.A.pos_tab;
+		int b = Phase.B.pos_tab;
+		int sca = Phase.A.score;
+		int scb= Phase.B.score;
+		int scpa = Phase.A.score_provisoire;
+		int scpb= Phase.B.score_provisoire;
+		int ox =(int) Phase.F.OxVar;
+		
+		
+		
+		
+	}
+	
+	public static void main(String[] args) {
+	}
+}

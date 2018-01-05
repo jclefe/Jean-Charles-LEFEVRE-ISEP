@@ -1,0 +1,49 @@
+import edu.princeton.cs.introcs.StdDraw;
+import java.awt.event.KeyEvent;
+
+public class Graphe {
+
+	public final static double LARGEUR = 6;
+	public final static double HAUTEUR = 6;
+	public final static double Xmin = -5;
+	public final static double Xmax = 3;
+	public final static double Ymin = -3;
+	public final static double Ymax = 3+0.8;
+//	public static int phase =1;
+	
+	public static void afficher_fond() {
+			StdDraw.picture(0, 0, "fondmarin.jpg",LARGEUR, HAUTEUR);
+		
+			//Rectangle pour la plage
+			StdDraw.picture(0, Ymax-0.7, "plage.jpg",LARGEUR, 0.6);
+			
+			//Rectangle sable de l'oxygene
+			StdDraw.picture(-4 , Ymax+3 , "arriere_plan.jpg",2, HAUTEUR+0.8);
+			StdDraw.picture(-2 , Ymax+3 , "arriere_plan.jpg",2, HAUTEUR+0.8);
+			StdDraw.picture(0 , Ymax+3 , "arriere_plan.jpg",2, HAUTEUR+0.8);
+			StdDraw.picture(2 , Ymax+3 , "arriere_plan.jpg",2, HAUTEUR+0.8);
+			StdDraw.setPenColor(StdDraw.BLUE);
+		//	StdDraw.line(-6, 3.405, 3, 3.405);
+		//	StdDraw.text(-4.6,3.6,"Oxygene :");
+			StdDraw.picture(-4.4 , 3.6, "oxy.png",1, 0.2);
+			
+				//contour pr le rectangle d'oxygene
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.filledRectangle(-0.5, 3.6, 3.3, 0.1);//contour pour le rectangle d'oxygene
+			StdDraw.setPenColor(StdDraw.BLUE);
+			StdDraw.rectangle(-0.5, 3.6, 3.31, 0.11);
+	}
+	public static void afficher_tableau(Joueur A, Joueur B) {
+			//Rectangle bois sur le cote
+		StdDraw.picture(-4, 0, "arriere_plan.jpg",2,HAUTEUR+0.8);
+		StdDraw.setPenColor(StdDraw.BLUE);
+		StdDraw.text(-4.4,3, "Phase de jeu : ");
+		StdDraw.text(-3.7,3, Integer.toString(Phase.phase));
+		StdDraw.text(-4.3,1, "Score "+A.name+" : ");
+		StdDraw.text(-4.3+0.9,1, Integer.toString(A.score));
+		StdDraw.text(-4.3,-1, "Score "+B.name+" : ");
+		StdDraw.text(-4.3+0.9,-1, Integer.toString(B.score));
+		StdDraw.setPenColor(StdDraw.WHITE);
+		
+	}
+}

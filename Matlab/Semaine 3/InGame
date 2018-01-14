@@ -2,8 +2,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseAdapter;
-
 import edu.princeton.cs.introcs.StdDraw;
+
 
 public class InGame extends MouseAdapter implements MouseListener {
 
@@ -13,6 +13,7 @@ public class InGame extends MouseAdapter implements MouseListener {
 			F.OxVar-=(1+A.nb_tresor);
 			A.game=0;
 			B.game=1;
+			Phase.tour++;
 			}
 	}
 	
@@ -22,6 +23,7 @@ public class InGame extends MouseAdapter implements MouseListener {
 			F.OxVar -= (1+A.nb_tresor);
 			A.game=0;
 			B.game=1;
+			Phase.tour++;
 			}
 	}
 	
@@ -47,6 +49,7 @@ public class InGame extends MouseAdapter implements MouseListener {
 				}
 				A.game=0;
 				B.game=1;
+				Phase.tour++;
 			}
 		}
 		//on gere ici le cas ou le joueur est tt en bas
@@ -58,6 +61,7 @@ public class InGame extends MouseAdapter implements MouseListener {
 				A.Intermediaire.remove(naha); //on retire cet element de la liste
 				A.game=0;
 				B.game=1;
+				Phase.tour++;
 			}
 			
 			if (posito[A.pos_tab]!=0) {
@@ -80,6 +84,7 @@ public class InGame extends MouseAdapter implements MouseListener {
 					}
 					A.game=0;
 					B.game=1;
+					Phase.tour++;
 			} 
 		}
 		
@@ -166,12 +171,15 @@ public class InGame extends MouseAdapter implements MouseListener {
 			StdDraw.setPenColor(StdDraw.RED);
 			StdDraw.text(0,2.5-2.8,"Egalité");
 		}
-		StdDraw.picture(-1.2, -1.5, "rejouer.png",0.8,0.4);
-		StdDraw.picture(1.2, -1.5, "quitter.png",0.8,0.4);
+		//StdDraw.picture(-1.2, -1.5, "rejouer.png",0.8,0.4);
+		StdDraw.picture(-1.2, -1.5, "rej.png",1.9,1.3);
+		StdDraw.picture(1.2, -1.5, "quit.png",1.9,1.3);
+		//StdDraw.picture(1.2, -1.5, "quitter.png",0.8,0.4);
 		StdDraw.show(20);
 		while(true) {
 			double pox;
 			double poy;
+
 			if (StdDraw.isMousePressed()) {
 				pox = StdDraw.mouseX();
 				poy =StdDraw.mouseY();
@@ -180,7 +188,7 @@ public class InGame extends MouseAdapter implements MouseListener {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			if (pox>=0.85 && pox<=1.65 && poy>=-1.74 && poy<=-1.34) {
+			if (pox>=0.38 && pox<=1.96 && poy>=-1.69 && poy<=-1.23) {
 			//	Animation qui apparait quand on a clique le bouton quitter
 				for (int i=0;i<100;i++) {
 				StdDraw.picture(-1, 100-i, "voletFerme.jpg",8,8);
@@ -188,7 +196,7 @@ public class InGame extends MouseAdapter implements MouseListener {
 				}
 				
 			}
-			if (pox>=-1.53 && pox<=-0.76 && poy>=-1.74 && poy<=-1.34) {
+			if (pox>=-2.01 && pox<=-0.42 && poy>=-1.69 && poy<=-1.23) {
 			//	Pour rejouer
 				A.score_provisoire = 0;
 				B.score_provisoire = 0;

@@ -1,6 +1,4 @@
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-
 import edu.princeton.cs.introcs.StdDraw;
 
 
@@ -27,11 +25,46 @@ public class Joueur {
 		this.Intermediaire = inter;
 	}
 	
+/////////Il y a un problème au dernier niveau pour descendre////////////////////////////////////////////////////////////////////////
+/*	public static double descendre_joueur(Joueur j, double pas){
+		if (j.pos_tab == Phase.C.niveaux+Phase.D.niveaux+Phase.E.niveaux-1) {
+			//j.pos_tab = -1;
+			//j.position= 3.1;
+			return j.position;
+		}
+			while (Phase.posito[(int) j.pos_tab+1] == 0) {
+				j.position-=pas;
+				j.pos_tab+=1;
+			}
+		j.position-=pas;
+		j.pos_tab+=1;
+		return j.position;
+	} */
+	
 	public static double descendre_joueur(Joueur j, double pas){
 		j.position-=pas;
 		j.pos_tab+=1;
 		return j.position;
 	}
+	/*public static double monter_joueur(Joueur j, double pas){
+		if (j.pos_tab == 0) {
+			j.pos_tab = -1;
+			j.position= 3.1;
+			return j.position;
+		}
+		while (Phase.posito[(int) j.pos_tab-1] == 0) {
+			j.position+=pas;
+			j.pos_tab-=1;
+			if (j.pos_tab == 0) {
+				j.pos_tab = -1;
+				j.position= 3.1;
+				return j.position;
+			}
+		}	
+		j.position+=pas;
+		j.pos_tab-=1;
+		return j.position;
+	}*/
 	public static double monter_joueur(Joueur j, double pas){
 		j.position+=pas;
 		j.pos_tab-=1;
@@ -43,6 +76,7 @@ public class Joueur {
 	}
 		
 
-public static void main(String[] args) {
+public static void main(String[] args) throws InterruptedException {
+	Lancement.lancer();
 	}
 }

@@ -3,19 +3,16 @@ import java.util.ArrayList;
 
 import edu.princeton.cs.introcs.StdDraw;
 
-//faire commencer le joueur le plus bas en premier (en cas d'egalité de profondeur : le premier est designe aleatoirement)! ON PEUT USE UNE BOUCLE FOR????????
-//faire tomber tous les coffres en bas qd il y a plus d'oxygene
 //musique de fond (si j'ai le temps)
 //exporter en JAR
+//Retirer les niveaux ds les phases 2 et 3 qd les coffres ont deja ete choppé
 
 //pb qd en phase 2 on choppe un coffre de la liste mais qu'on remonte pas a tps, il disparait ds la phase 3. 
 //ca vient de A.Intermediaire.remove(naha) ds game
-
 //Solution : une liste intermediaire2 qui ajoute les élements qu'on remove de la liste intermediaire, cette liste intermediaire2 
 //revient a 0 quand le joueur remonte a la surface
 //en passant a la phase suivant on fait un intermediaire.addall(intermediaire2) et theoriquement ca devrait marcher
 
-//il reste un coffre a droite et a gauche qd on passe de single a multi ou encore de multi a multi : PROBLEME !!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 public class Phase {
 
@@ -42,15 +39,11 @@ public class Phase {
 	//On cree le tableau posito pour faire disparaitre les coffres qd on appuie sur espace
 	public static double [] posito = new double [(int) (C.niveaux +D.niveaux+E.niveaux)];
 	public static double pas = (HAUTEUR-0.2)/(C.niveaux +D.niveaux+E.niveaux);
-	public static Oxygene F = new Oxygene(C.niveaux +D.niveaux+E.niveaux);
-	
+	public static Oxygene F = new Oxygene(C.niveaux +D.niveaux+E.niveaux); //la réserve d'oxygene est egale a 2x le nb de niveaux
+	public static int tour=0;
 	
 	public static void tour_multi() throws InterruptedException {
-		//notre réserve d'oxygene se regenere a chaque nouveau tour
-//	Oxygene F = new Oxygene(C.niveaux +D.niveaux+E.niveaux); //la réserve d'oxygene est egale a 2x le nb de niveaux
-	
 
-	
 		//On remplit le tableau de trésor uniquement lors de la premiere phase car les coffres restent pour les 2 autres phases
 	if (phase==1) {
 		for (int i=0;i<C.niveaux;i++) {
@@ -62,14 +55,12 @@ public class Phase {
 		for (int i=0;i<E.niveaux;i++) {
 			troiz[i] = new Tresors(E);
 		}
-	}
-	
-	//on initialise tout le tableau posito a 1 pour faire apparaitre tous les coffres (uniquement en phase 1)
-	if (phase==1) {
+		//on initialise tout le tableau posito a 1 pour faire apparaitre tous les coffres (uniquement en phase 1)
 		for (int i=0;i<C.niveaux +D.niveaux+E.niveaux;i++) {
 			posito[i]=1;
 		}
 	}
+	
 	StdDraw.setCanvasSize(720, 670);
 	StdDraw.setXscale(Xmin,Xmax);
 	StdDraw.setYscale(Ymin,Ymax);
@@ -80,7 +71,29 @@ public class Phase {
 	long end = t+30000;
 	while(System.currentTimeMillis() < end) { */
 	
-	while(F.OxVar>0) { //condition d'arret qd il y a plus d'oxyg
+	while(Oxygene.OxVar>0) { //condition d'arret qd il y a plus d'oxyg
+		if (A.position<B.position) {
+			A.game=1;
+			B.game=0;
+		}
+		if (A.position>B.position) {
+			A.game=0;
+			B.game=1;
+		}
+		if (A.position==B.position) { //designe aléatoirement qui commence en premier quand ils sont a la meme hauteur 
+			int g = (int)(Math.random()*6);//donne un entier compris entre 0 et 5
+			if (g<3) {
+			A.game=1;
+			B.game=0;
+			}
+			if (g>3) {
+			A.game=0;
+			B.game=1;
+			}
+		}
+		
+		tour=0;
+		while(tour<2) { //c'est pour faire jouer le joueur le plus bas en premier
 		Graphe.afficher_fond();
 		
 		//afficher les coffres qu'on a pas pu remonter a temps a la surface
@@ -96,7 +109,7 @@ public class Phase {
 			A.score_provisoire=0;
 			Graphe.afficher_tableau(A, B);
 			A.nb_tresor=0;
-			for (int i=0;i<A.coffreBas.size();i++) {//concerne uniquement la derniere ligne
+			for (int i=0;i<A.coffreBas.size();i++) {//concerne uniquement la derniere ligne de coffres
 				A.coffreBas.remove(i);
 			}
 		}
@@ -109,7 +122,7 @@ public class Phase {
 				B.coffreBas.remove(i);
 			}
 		}
-		double b = pas;
+		double b = pas;// b sera incremente de "pas"pour afficher les coffres les uns en dessous des autres
 		//affiche les coffres qui n'ont pas encore été choppé
 		for (int i=0;i<(C.niveaux +D.niveaux+E.niveaux);i++) {
 			if (posito[i]!=0) {
@@ -123,10 +136,10 @@ public class Phase {
 		}
 		if (B.game ==1){ 
 			if(Lancement.test==2) {
-				InGame.tourDeJeu(B,A, F,C,D,E,pas,posito,prems,deuz,troiz);
+				InGame.tourDeJeu(B,A, F,C,D,E,pas,posito,prems,deuz,troiz); //si on a choisi multiplayer
 			}
 			if(Lancement.test==1) {
-				InGame.tourDeJeuIA(B,A,F,C,D,E,pas,posito,prems,deuz,troiz);
+				InGame.tourDeJeuIA(B,A,F,C,D,E,pas,posito,prems,deuz,troiz); //si on a choisi single player
 			}
 		}
 		
@@ -154,6 +167,7 @@ public class Phase {
 		
 		StdDraw.show(20);
 		}
+	}
 	}
 	
 	public static void main(String[] args) throws InterruptedException {

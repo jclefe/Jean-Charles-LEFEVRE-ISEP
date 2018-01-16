@@ -3,39 +3,28 @@ import java.awt.event.KeyEvent;
 
 public class Graphe {
 
-	public final static double LARGEUR = 6;
-	public final static double HAUTEUR = 6;
-	public final static double Xmin = -5;
-	public final static double Xmax = 3;
-	public final static double Ymin = -3;
-	public final static double Ymax = 3+0.8;
-//	public static int phase =1;
+
 	
 	public static void afficher_fond() {
-			StdDraw.picture(0, 0, "fondmarin.jpg",LARGEUR, HAUTEUR);
-		
-			//Rectangle pour la plage
-			StdDraw.picture(0, Ymax-0.7, "plage.jpg",LARGEUR, 0.6);
-			
-			//Rectangle sable de l'oxygene
-			StdDraw.picture(-4 , Ymax+3 , "arriere_plan.jpg",2, HAUTEUR+0.8);
-			StdDraw.picture(-2 , Ymax+3 , "arriere_plan.jpg",2, HAUTEUR+0.8);
-			StdDraw.picture(0 , Ymax+3 , "arriere_plan.jpg",2, HAUTEUR+0.8);
-			StdDraw.picture(2 , Ymax+3 , "arriere_plan.jpg",2, HAUTEUR+0.8);
-			StdDraw.setPenColor(StdDraw.BLUE);
-		//	StdDraw.line(-6, 3.405, 3, 3.405);
-		//	StdDraw.text(-4.6,3.6,"Oxygene :");
+				//Fond marin ou les plongeurs se baladent
+			StdDraw.picture(0, 0, "fondmarin.jpg",Phase.LARGEUR, Phase.HAUTEUR);
+				//Rectangle pour la plage
+			StdDraw.picture(0, Phase.Ymax-0.7, "plage.jpg",Phase.LARGEUR, 0.6);
+				//Bois
+			StdDraw.picture(-4 , Phase.Ymax+3 , "arriere_plan.jpg",2, Phase.HAUTEUR+0.8);
+			StdDraw.picture(-2 , Phase.Ymax+3 , "arriere_plan.jpg",2, Phase.HAUTEUR+0.8);
+			StdDraw.picture(0 , Phase.Ymax+3 , "arriere_plan.jpg",2, Phase.HAUTEUR+0.8);
+			StdDraw.picture(2 , Phase.Ymax+3 , "arriere_plan.jpg",2, Phase.HAUTEUR+0.8);
 			StdDraw.picture(-4.4 , 3.6, "oxy.png",1, 0.2);
-			
 				//contour pr le rectangle d'oxygene
 			StdDraw.setPenColor(StdDraw.WHITE);
 			StdDraw.filledRectangle(-0.5, 3.6, 3.3, 0.1);//contour pour le rectangle d'oxygene
 			StdDraw.setPenColor(StdDraw.BLUE);
 			StdDraw.rectangle(-0.5, 3.6, 3.31, 0.11);
 	}
-	public static void afficher_tableau(Joueur A, Joueur B) {
+	public static void afficher_tableau(Joueur A, Joueur B) { //sur le cote du gauche avec les phases et le score des joueurs
 			//Rectangle bois sur le cote
-		StdDraw.picture(-4, 0, "arriere_plan.jpg",2,HAUTEUR+0.8);
+		StdDraw.picture(-4, 0, "arriere_plan.jpg",2,Phase.HAUTEUR+0.8);
 		StdDraw.setPenColor(StdDraw.BLUE);
 		StdDraw.text(-4.4,3, "Phase de jeu : ");
 		StdDraw.text(-3.7,3, Integer.toString(Phase.phase));
@@ -45,5 +34,35 @@ public class Graphe {
 		StdDraw.text(-4.3+0.9,-1, Integer.toString(B.score));
 		StdDraw.setPenColor(StdDraw.WHITE);
 		
+	}
+	
+	public static void afficher_menu() {
+		StdDraw.setCanvasSize(720, 670); //pour aggrandir ou elargir la fenetre
+		StdDraw.setXscale(Phase.Xmin,Phase.Xmax); //permet de savoir de ou a ou on va
+		StdDraw.setYscale(Phase.Ymin,Phase.Ymax);
+		StdDraw.picture(-1, 1, "ecran.jpg",Phase.LARGEUR+2,Phase.HAUTEUR+2);
+		StdDraw.picture(-1, 2, "image.png",4,2);
+		StdDraw.picture(-3, -1.5, "parechemin.png",3,1);
+		StdDraw.picture(1, -1.5, "parechemin.png",3,1);
+		StdDraw.picture(-3, -1.6, "single.png",2,0.5);
+		StdDraw.picture(1, -1.6, "multi.png",2,0.5);
+	}
+	
+	public static void choix_singlePlayer() throws InterruptedException{
+		StdDraw.picture(-3, -1.5, "parechemin.png",3,1);
+		StdDraw.picture(1, -1.5, "parechemin.png",3,1);
+		StdDraw.picture(-3, -1.6, "singleR.png",2,0.5);
+		StdDraw.picture(1, -1.6, "multi.png",2,0.5);
+		Lancement.test=1;
+		Thread.sleep(200);
+	}
+	
+	public static void choix_multiPlayer() throws InterruptedException{
+		StdDraw.picture(-3, -1.5, "parechemin.png",3,1);
+		StdDraw.picture(1, -1.5, "parechemin.png",3,1);
+		StdDraw.picture(-3, -1.6, "single.png",2,0.5);
+		StdDraw.picture(1, -1.6, "multiR.png",2,0.5);
+		Lancement.test=2;
+		Thread.sleep(200);
 	}
 }

@@ -1,4 +1,6 @@
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
 import edu.princeton.cs.introcs.StdDraw;
 
 public class Lancement {
@@ -6,64 +8,27 @@ public class Lancement {
 	
 	
 	public static void lancer() throws InterruptedException{
-		StdDraw.setCanvasSize(720, 670); //pour aggrandir ou elargir la fenetre
-		StdDraw.setXscale(Phase.Xmin,Phase.Xmax); //permet de savoir de ou a ou on va
-		StdDraw.setYscale(Phase.Ymin,Phase.Ymax);
-		StdDraw.picture(-1, 1, "ecran.jpg",Phase.LARGEUR+2,Phase.HAUTEUR+2);
-		StdDraw.picture(-1, 2, "image.png",4,2);
-		StdDraw.picture(-3, -1.5, "parechemin.png",3,1);
-		StdDraw.picture(1, -1.5, "parechemin.png",3,1);
-		StdDraw.picture(-3, -1.6, "single.png",2,0.5);
-		StdDraw.picture(1, -1.6, "multi.png",2,0.5);
+		Graphe.afficher_menu();
 		while(true) {
 		if (StdDraw.isKeyPressed(KeyEvent.VK_LEFT)) {
-			StdDraw.picture(-3, -1.5, "parechemin.png",3,1);
-			StdDraw.picture(1, -1.5, "parechemin.png",3,1);
-			StdDraw.picture(-3, -1.6, "singleR.png",2,0.5);
-			StdDraw.picture(1, -1.6, "multi.png",2,0.5);
-			test=1;
-			Thread.sleep(200);
+			Graphe.choix_singlePlayer();
 			}
 		if (StdDraw.isKeyPressed(KeyEvent.VK_RIGHT)) {
-			StdDraw.picture(-3, -1.5, "parechemin.png",3,1);
-			StdDraw.picture(1, -1.5, "parechemin.png",3,1);
-			StdDraw.picture(-3, -1.6, "single.png",2,0.5);
-			StdDraw.picture(1, -1.6, "multiR.png",2,0.5);
-			test=2;
-			Thread.sleep(200);
+			Graphe.choix_multiPlayer();
 			}
 		StdDraw.show(20);
 		if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
 			Thread.sleep(200);
-			//single player
-			if (test==1) {
-				Phase.tour_multi();
-				InGame.annonceFinDePhase(Phase.A,Phase.B);
+			if (test==1) {//single player
+				Phase.tour_multi();//premiere phase du jeu
+				InGame.annonceFinDePhase(Phase.A,Phase.B); //ecran noir qui annonce le vainqueur temporaire
 				Phase.phase++;
 				int tes = 1;
 				while(tes==1) {
-					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
+					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) { //appuyer sur entrée permet de passer a la phase suivante
 						Thread.sleep(200);
-						Phase.A.score_provisoire = 0;
-						Phase.B.score_provisoire = 0;
-						Phase.A.position = 3.1;
-						Phase.B.position = 3.1;
-						Phase.A.pos_tab = -1;
-						Phase.A.nb_tresor = 0;
-						Phase.A.game=1;
-						Phase.B.pos_tab = -1;
-						Phase.B.nb_tresor = 0;
-						Phase.B.game=0;
-						Phase.A.Intermediaire.addAll(Phase.A.coffreBas);
-						Phase.B.Intermediaire.addAll(Phase.B.coffreBas);
-						Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
-						while(!(Phase.A.coffreBas.isEmpty())) {
-							Phase.A.coffreBas.remove(0);
-						}
-						while(!(Phase.B.coffreBas.isEmpty())) {
-							Phase.B.coffreBas.remove(0);
-						}
-						Phase.tour_multi();
+						InGame.reinitialisation_phase(); //avant de passer a la phase 2, on remet les parametres joueurs initiaux (position du joueur a la plage...)
+						Phase.tour_multi(); //phase 2 du jeu
 						InGame.annonceFinDePhase(Phase.A,Phase.B);
 						Phase.phase++;
 						tes=2;
@@ -72,33 +37,14 @@ public class Lancement {
 				while(tes==2) {
 					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
 						Thread.sleep(200);
-						Phase.A.score_provisoire = 0;
-						Phase.B.score_provisoire = 0;
-						Phase.A.position = 3.1;
-						Phase.B.position = 3.1;
-						Phase.A.pos_tab = -1;
-						Phase.A.nb_tresor = 0;
-						Phase.A.game=1;
-						Phase.B.pos_tab = -1;
-						Phase.B.nb_tresor = 0;
-						Phase.B.game=0;
-						Phase.A.Intermediaire.addAll(Phase.A.coffreBas);
-						Phase.B.Intermediaire.addAll(Phase.B.coffreBas);
-						Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
-						while(!(Phase.A.coffreBas.isEmpty())) {
-							Phase.A.coffreBas.remove(0);
-						}
-						while(!(Phase.B.coffreBas.isEmpty())) {
-							Phase.B.coffreBas.remove(0);
-						}
+						InGame.reinitialisation_phase();
 						Phase.tour_multi();
-						InGame.annonceFinDeJeu(Phase.A,Phase.B);
+						InGame.annonceFinDeJeu(Phase.A,Phase.B); //annonce le vainqueur final et propose de rejouer ou quitter le jeu
 						tes=0;
 					}
 				}
 			}
-			//multiplayer
-			if (test==2) {
+			if (test==2) { //multiplayer
 				Phase.tour_multi();
 				InGame.annonceFinDePhase(Phase.A,Phase.B);
 				Phase.phase++;
@@ -106,25 +52,7 @@ public class Lancement {
 				while(tes==1) {
 					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
 						Thread.sleep(200);
-						Phase.A.score_provisoire = 0;
-						Phase.B.score_provisoire = 0;
-						Phase.A.position = 3.1;
-						Phase.B.position = 3.1;
-						Phase.A.pos_tab = -1;
-						Phase.A.nb_tresor = 0;
-						Phase.A.game=1;
-						Phase.B.pos_tab = -1;
-						Phase.B.nb_tresor = 0;
-						Phase.B.game=0;
-						Phase.A.Intermediaire.addAll(Phase.A.coffreBas);
-						Phase.B.Intermediaire.addAll(Phase.B.coffreBas);
-						Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
-						while(!(Phase.A.coffreBas.isEmpty())) {
-							Phase.A.coffreBas.remove(0);
-						}
-						while(!(Phase.B.coffreBas.isEmpty())) {
-							Phase.B.coffreBas.remove(0);
-						}
+						InGame.reinitialisation_phase();
 						Phase.tour_multi();
 						InGame.annonceFinDePhase(Phase.A,Phase.B);
 						Phase.phase++;
@@ -134,25 +62,7 @@ public class Lancement {
 				while(tes==2) {
 					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
 						Thread.sleep(200);
-						Phase.A.score_provisoire = 0;
-						Phase.B.score_provisoire = 0;
-						Phase.A.position = 3.1;
-						Phase.B.position = 3.1;
-						Phase.A.pos_tab = -1;
-						Phase.A.nb_tresor = 0;
-						Phase.A.game=1;
-						Phase.B.pos_tab = -1;
-						Phase.B.nb_tresor = 0;
-						Phase.B.game=0;
-						Phase.A.Intermediaire.addAll(Phase.A.coffreBas);
-						Phase.B.Intermediaire.addAll(Phase.B.coffreBas);
-						Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
-						while(!(Phase.A.coffreBas.isEmpty())) {
-							Phase.A.coffreBas.remove(0);
-						}
-						while(!(Phase.B.coffreBas.isEmpty())) {
-							Phase.B.coffreBas.remove(0);
-						}
+						InGame.reinitialisation_phase();
 						Phase.tour_multi();
 						InGame.annonceFinDeJeu(Phase.A,Phase.B);
 						tes=0;

@@ -6,12 +6,12 @@ public class Joueur {
 	public String name;
 	public int score;
 	public int score_provisoire;
-	public double position;
-	public int pos_tab;
-	public int nb_tresor;
+	public double position; //position graphique du joueur
+	public int pos_tab; //position du joueur (position -1 correspond a la plage, position 0 correspond au premier niveau, position 1 correspond au 2e niv...
+	public int nb_tresor; //permet d'augmenter la masse du joueur quand il transporte des coffres pour augmenter sa conso d'oxygene
 	public int game;//=0 ou 1 pour savoir c au tour de qui de jouer
-	public ArrayList<Integer> coffreBas = new ArrayList<>();
-	public ArrayList<Integer> Intermediaire = new ArrayList<>();
+	public ArrayList<Integer> coffreBas = new ArrayList<>(); //correspond aux coffres pris entre deux remontés d'un joueur. cette liste revient a 0 quand il est remonté a la surface
+	public ArrayList<Integer> Intermediaire = new ArrayList<>();//correspond aux coffres qui ont pas pu etre remontés a temps par le joueur
 	
 	public Joueur (String name, double pos,int sc, int ssc, int tab, int n, int game, ArrayList<Integer> h,ArrayList<Integer> inter) {
 		this.name = name;
@@ -25,53 +25,19 @@ public class Joueur {
 		this.Intermediaire = inter;
 	}
 	
-/////////Il y a un problème au dernier niveau pour descendre////////////////////////////////////////////////////////////////////////
-/*	public static double descendre_joueur(Joueur j, double pas){
-		if (j.pos_tab == Phase.C.niveaux+Phase.D.niveaux+Phase.E.niveaux-1) {
-			//j.pos_tab = -1;
-			//j.position= 3.1;
-			return j.position;
-		}
-			while (Phase.posito[(int) j.pos_tab+1] == 0) {
-				j.position-=pas;
-				j.pos_tab+=1;
-			}
-		j.position-=pas;
-		j.pos_tab+=1;
-		return j.position;
-	} */
-	
 	public static double descendre_joueur(Joueur j, double pas){
 		j.position-=pas;
 		j.pos_tab+=1;
 		return j.position;
 	}
-	/*public static double monter_joueur(Joueur j, double pas){
-		if (j.pos_tab == 0) {
-			j.pos_tab = -1;
-			j.position= 3.1;
-			return j.position;
-		}
-		while (Phase.posito[(int) j.pos_tab-1] == 0) {
-			j.position+=pas;
-			j.pos_tab-=1;
-			if (j.pos_tab == 0) {
-				j.pos_tab = -1;
-				j.position= 3.1;
-				return j.position;
-			}
-		}	
-		j.position+=pas;
-		j.pos_tab-=1;
-		return j.position;
-	}*/
+	
 	public static double monter_joueur(Joueur j, double pas){
 		j.position+=pas;
 		j.pos_tab-=1;
 		return j.position;
 	}
 	
-	public void afficher_joueur(double position_initiale, int x) {
+	public void afficher_joueur(double position_initiale, int x) { //affiche le joueur en prenant en parametre sa position sur y et sa position sur x
 		StdDraw.picture(x, position_initiale, "plongeur_final.png",0.5,0.5);
 	}
 		

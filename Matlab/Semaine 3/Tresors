@@ -7,14 +7,14 @@ public class Tresors {
 	
 	public int nombre;
 	
-	public Tresors(Cave a) {
-		if(a.nb == 1) {
+	public Tresors(Cave a) { 
+		if(a.nb == 1) { //si ca correspond a la cave de niveau 1
 			this.nombre = 1+ (int) (Math.random()*(3-0));
 		}
-		if(a.nb == 2) {
+		if(a.nb == 2) { //si ca correspond a la cave de niveau 2
 			this.nombre = 5+ (int) (Math.random()*(8-4));
 		}
-		if(a.nb == 3) {
+		if(a.nb == 3) { //si ca correspond a la cave de niveau 3
 			this.nombre = 10+ (int) (Math.random()*(12-9));
 		}
 	}
@@ -23,7 +23,7 @@ public class Tresors {
 		StdDraw.picture(0, (3 -position_y), "tresor.png",0.2,0.2);
 	}
 	
-	public static void afficher_coffres_dernier(double position_x) {
+	public static void afficher_coffres_dernier(double position_x) { //afficher les coffres tout en bas des phases précédentes non remontés a temps
 		StdDraw.picture(position_x, 3-Phase.pas*(Phase.C.niveaux+Phase.D.niveaux+Phase.E.niveaux), "tresor.png",0.2,0.2);
 	}
 	

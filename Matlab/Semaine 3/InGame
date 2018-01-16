@@ -1,6 +1,7 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.awt.event.MouseAdapter;
 import edu.princeton.cs.introcs.StdDraw;
 
@@ -27,24 +28,28 @@ public class InGame extends MouseAdapter implements MouseListener {
 			}
 	}
 	
-	public static void espace(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double [] posito, Tresors [] prems, Tresors [] deuz, Tresors [] troiz) throws InterruptedException {
-		if (A.pos_tab != -1 && A.pos_tab !=(C.niveaux+D.niveaux+E.niveaux-1)) {
-			if (posito[A.pos_tab]!=0) {
-				posito[A.pos_tab]=0;
+	public static void espace(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, ArrayList<Integer>  posito, ArrayList<Tresors> prems, ArrayList<Tresors> deuz, ArrayList<Tresors> troiz) throws InterruptedException {
+	//le cas où le joueur ne se situe pas sur la plage et le cas A.pos_tab = C+D+E-1 est un cas partic vu juste en dessous	
+		if (A.pos_tab != -1 && A.pos_tab !=(C.niveaux+D.niveaux+E.niveaux-1)) { 
+			if (posito.get(A.pos_tab)!=0) { //cad si le coffre n a pas deja ete pris
+				posito.set(A.pos_tab,0);//on met a 0 pour indiquer que le coffre est desormais pris
 				F.OxVar -= 1;
 				A.nb_tresor+=1;
-				//ces 3 if permettent de calculer le score du tresor recolter en fct de la position du joueur
+//ces 3 if permettent de calculer le score du tresor recolté en fct de la position du joueur (Cave 1,2 ou 3)
 				if (A.pos_tab>=0 && A.pos_tab<C.niveaux) {
-					A.score_provisoire += prems[(int)(A.pos_tab)].nombre;
-					A.coffreBas.add(prems[(int)(A.pos_tab)].nombre);
+					A.score_provisoire += prems.get(0).nombre;
+					A.coffreBas.add(prems.get(0).nombre);
+					prems.remove(0);
 				}
 				if (A.pos_tab>=C.niveaux && A.pos_tab<C.niveaux+D.niveaux) {
-					A.score_provisoire += deuz[(int)(A.pos_tab-C.niveaux)].nombre;
-					A.coffreBas.add(deuz[(int)(A.pos_tab-C.niveaux)].nombre);
+					A.score_provisoire += deuz.get(0).nombre;
+					A.coffreBas.add(deuz.get(0).nombre);
+					deuz.remove(0);
 				}
 				if (A.pos_tab>=C.niveaux+D.niveaux && A.pos_tab<C.niveaux+D.niveaux+E.niveaux) {
-					A.score_provisoire += troiz[(int)(A.pos_tab-C.niveaux-D.niveaux)].nombre;
-					A.coffreBas.add(troiz[(int)(A.pos_tab-C.niveaux-D.niveaux)].nombre);
+					A.score_provisoire += troiz.get(0).nombre;
+					A.coffreBas.add(troiz.get(0).nombre);
+					troiz.remove(0);
 					
 				}
 				A.game=0;
@@ -52,9 +57,9 @@ public class InGame extends MouseAdapter implements MouseListener {
 				Phase.tour++;
 			}
 		}
-		//on gere ici le cas ou le joueur est tt en bas
+//on gere ici le cas ou le joueur est tt en bas :
 		if (A.pos_tab==(C.niveaux+D.niveaux+E.niveaux-1)) {
-			if (posito[A.pos_tab]==0 && !(A.Intermediaire.isEmpty())) {
+			if (posito.get(A.pos_tab)==0 && !(A.Intermediaire.isEmpty())) { //si le dernier coffre a été pris mais qu'il reste les coffres qui sont tombés
 				//prendre un des coffres de la liste qu'on a mis
 				int naha = (int) (Math.random()*(Phase.A.Intermediaire.size())); //prend un des coffres au hasard ds la liste 
 				A.score_provisoire += A.Intermediaire.get(naha); 
@@ -63,34 +68,23 @@ public class InGame extends MouseAdapter implements MouseListener {
 				B.game=1;
 				Phase.tour++;
 			}
-			
-			if (posito[A.pos_tab]!=0) {
-					posito[A.pos_tab]=0;
-					F.OxVar -= 1;
-					A.nb_tresor+=1;
-					//ces 3 if permettent de calculer le score du tresor recolter en fct de la position du joueur
-					if (A.pos_tab>=0 && A.pos_tab<C.niveaux) {
-						A.score_provisoire += prems[(int)(A.pos_tab)].nombre;
-						A.coffreBas.add(prems[(int)(A.pos_tab)].nombre);
-					}
-					if (A.pos_tab>=C.niveaux && A.pos_tab<C.niveaux+D.niveaux) {
-						A.score_provisoire += deuz[(int)(A.pos_tab-C.niveaux)].nombre;
-						A.coffreBas.add(deuz[(int)(A.pos_tab-C.niveaux)].nombre);
-					}
-					if (A.pos_tab>=C.niveaux+D.niveaux && A.pos_tab<C.niveaux+D.niveaux+E.niveaux) {
-						A.score_provisoire += troiz[(int)(A.pos_tab-C.niveaux-D.niveaux)].nombre;
-						A.coffreBas.add(troiz[(int)(A.pos_tab-C.niveaux-D.niveaux)].nombre);
-						
-					}
-					A.game=0;
-					B.game=1;
-					Phase.tour++;
+
+			if (posito.get(A.pos_tab)!=0) {
+				posito.set(A.pos_tab,0);
+				F.OxVar -= 1;
+				A.nb_tresor+=1;
+				A.score_provisoire += troiz.get(0).nombre;
+				A.coffreBas.add(troiz.get(0).nombre);
+				troiz.remove(0);
+				A.game=0;
+				B.game=1;
+				Phase.tour++;
 			} 
 		}
 		
 	}
 	
-	public static void tourDeJeu(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, double[]posito, Tresors[]prems,Tresors[] deuz, Tresors[] troiz) throws InterruptedException {
+	public static void tourDeJeu(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, ArrayList<Integer>posito, ArrayList<Tresors> prems,ArrayList<Tresors> deuz, ArrayList<Tresors> troiz) throws InterruptedException {
 		if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN)) {
 			InGame.descendre(A,B,F,C,D,E,pas);
 			Thread.sleep(200);
@@ -105,7 +99,7 @@ public class InGame extends MouseAdapter implements MouseListener {
 		}
 	}
 	
-	public static void tourDeJeuIA(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, double[]posito, Tresors[]prems,Tresors[] deuz, Tresors[] troiz) throws InterruptedException {
+	public static void tourDeJeuIA(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, ArrayList<Integer> posito, ArrayList<Tresors> prems,ArrayList<Tresors> deuz, ArrayList<Tresors> troiz) throws InterruptedException {
 		int a = (int) (1+Math.random()*3);
 		if (a==1) {
 			InGame.descendre(A,B,F,C,D,E,pas);
@@ -148,6 +142,39 @@ public class InGame extends MouseAdapter implements MouseListener {
 		StdDraw.show(20);
 	}
 	
+	public static void reinitialisation_phase() {
+		Phase.A.score_provisoire = 0;
+		Phase.B.score_provisoire = 0;
+		Phase.A.position = 3.1;
+		Phase.B.position = 3.1;
+		Phase.A.pos_tab = -1;
+		Phase.A.nb_tresor = 0;
+		Phase.A.game=1;
+		Phase.B.pos_tab = -1;
+		Phase.B.nb_tresor = 0;
+		Phase.B.game=0;
+		Phase.A.Intermediaire.addAll(Phase.A.coffreBas);
+		Phase.B.Intermediaire.addAll(Phase.B.coffreBas);
+		Phase.F = new Oxygene(Phase.nb_niveaux_initial);
+		while(!(Phase.A.coffreBas.isEmpty())) {
+			Phase.A.coffreBas.remove(0);
+		}
+		while(!(Phase.B.coffreBas.isEmpty())) {
+			Phase.B.coffreBas.remove(0);
+		}
+	//permet de supprimer les niveaux où les coffres ont deja ete pris dans la phase
+		Phase.C.niveaux = Phase.prems.size();
+		Phase.D.niveaux = Phase.deuz.size();
+		Phase.E.niveaux = Phase.troiz.size();
+		Phase.pas = (Phase.HAUTEUR-0.2)/(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
+//supprimer tous les 0 de la liste posito pour supprimer les niveaux ss coffres aux autres phases
+		for (int i=Phase.posito.size()-1;i>=0;i--) {
+			if (Phase.posito.get(i) == 0) {
+				Phase.posito.remove(i);
+			}
+		}
+	}
+	
 	public static void annonceFinDeJeu(Joueur A, Joueur B) throws InterruptedException{
 		for (int i=0;i<50;i++) {
 			StdDraw.picture(0, 0, "fondNoir.jpg",i*0.1,i*0.1); //au final on a 5 en largeur et en hauteur (=50*0.1)
@@ -171,10 +198,8 @@ public class InGame extends MouseAdapter implements MouseListener {
 			StdDraw.setPenColor(StdDraw.RED);
 			StdDraw.text(0,2.5-2.8,"Egalité");
 		}
-		//StdDraw.picture(-1.2, -1.5, "rejouer.png",0.8,0.4);
 		StdDraw.picture(-1.2, -1.5, "rej.png",1.9,1.3);
 		StdDraw.picture(1.2, -1.5, "quit.png",1.9,1.3);
-		//StdDraw.picture(1.2, -1.5, "quitter.png",0.8,0.4);
 		StdDraw.show(20);
 		while(true) {
 			double pox;
@@ -215,11 +240,21 @@ public class InGame extends MouseAdapter implements MouseListener {
 				Phase.D = new Cave(2);
 				Phase.E = new Cave(3);
 				Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
-				Phase.posito = new double [(int) (Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux)];
+				Phase.nb_niveaux_initial = (int)(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
+				while (!(Phase.posito.isEmpty())) {
+					Phase.posito.remove(0);
+				}
 				Phase.pas = (Phase.HAUTEUR-0.2)/(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
-				Phase.prems = new Tresors [(int) Phase.C.niveaux];
-				Phase.deuz = new Tresors [(int) Phase.D.niveaux];
-				Phase.troiz = new Tresors [(int) Phase.E.niveaux];
+				while (!(Phase.prems.isEmpty())) {
+					Phase.prems.remove(0);
+				}
+				while (!(Phase.deuz.isEmpty())) {
+					Phase.deuz.remove(0);
+				}
+				while (!(Phase.troiz.isEmpty())) {
+					Phase.troiz.remove(0);
+				}
+				
 				while(!(A.coffreBas.isEmpty())) {
 					A.coffreBas.remove(0);
 				}

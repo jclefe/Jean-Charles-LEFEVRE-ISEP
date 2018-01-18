@@ -29,7 +29,7 @@ public class InGame extends MouseAdapter implements MouseListener {
 	}
 	
 	public static void espace(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, ArrayList<Integer>  posito, ArrayList<Tresors> prems, ArrayList<Tresors> deuz, ArrayList<Tresors> troiz) throws InterruptedException {
-	//le cas où le joueur ne se situe pas sur la plage et le cas A.pos_tab = C+D+E-1 est un cas partic vu juste en dessous	
+	//(cas general) le cas où le joueur ne se situe pas sur la plage et le cas A.pos_tab = C+D+E-1 est un cas partic vu juste en dessous	
 		if (A.pos_tab != -1 && A.pos_tab !=(C.niveaux+D.niveaux+E.niveaux-1)) { 
 			if (posito.get(A.pos_tab)!=0) { //cad si le coffre n a pas deja ete pris
 				posito.set(A.pos_tab,0);//on met a 0 pour indiquer que le coffre est desormais pris
@@ -63,6 +63,7 @@ public class InGame extends MouseAdapter implements MouseListener {
 				//prendre un des coffres de la liste qu'on a mis
 				int naha = (int) (Math.random()*(Phase.A.Intermediaire.size())); //prend un des coffres au hasard ds la liste 
 				A.score_provisoire += A.Intermediaire.get(naha); 
+				A.coffreBas.add(A.Intermediaire.get(naha));
 				A.Intermediaire.remove(naha); //on retire cet element de la liste
 				A.game=0;
 				B.game=1;
@@ -99,49 +100,6 @@ public class InGame extends MouseAdapter implements MouseListener {
 		}
 	}
 	
-	public static void tourDeJeuIA(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, ArrayList<Integer> posito, ArrayList<Tresors> prems,ArrayList<Tresors> deuz, ArrayList<Tresors> troiz) throws InterruptedException {
-		int a = (int) (1+Math.random()*3);
-		if (a==1) {
-			InGame.descendre(A,B,F,C,D,E,pas);
-			Thread.sleep(200);
-		}
-		if (a==2) {
-			InGame.monter(A,B,F,pas);
-			Thread.sleep(200); 
-		}
-		if (a==3) {
-			InGame.espace(A,B,F,C, D, E, posito, prems, deuz, troiz);
-			Thread.sleep(200); 
-		}
-	}
-		
-	public static void annonceFinDePhase(Joueur A, Joueur B) {
-		for (int i=0;i<50;i++) {
-			StdDraw.picture(0, 0, "fondNoir.jpg",i*0.1,i*0.1); //au final on a 5 en largeur et en hauteur (=50*0.1)
-			StdDraw.show(20);
-		}
-		StdDraw.text(0, 2.5-0.5, "FIN DE LA PHASE");
-		StdDraw.text(0, 2.5-0.7, "(Appuyez sur entrée pour passer à la phase suivante)");
-		StdDraw.text(-2+0.8, 2.5-1.5, "Score "+A.name+" : ");
-		StdDraw.text(-2+1.8,2.5-1.5, Integer.toString(A.score));
-		StdDraw.text(-2+0.8, 2.5-2.7, "Score "+B.name+" : ");
-		StdDraw.text(-2+1.8,2.5-2.7, Integer.toString(B.score));
-		StdDraw.text(0, 2.5-3.5, "VAINQUEUR TEMPORAIRE : ");
-		if (A.score>B.score) {
-			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.text(0, 2.5-3.8, A.name);
-		}
-		if (A.score<B.score) {
-			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.text(0, 2.5-3.8, B.name);
-		}
-		if (A.score==B.score){
-			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.text(0,2.5-3.8,"Egalité");
-		}
-		StdDraw.show(20);
-	}
-	
 	public static void reinitialisation_phase() {
 		Phase.A.score_provisoire = 0;
 		Phase.B.score_provisoire = 0;
@@ -175,114 +133,12 @@ public class InGame extends MouseAdapter implements MouseListener {
 		}
 	}
 	
-	public static void annonceFinDeJeu(Joueur A, Joueur B) throws InterruptedException{
-		for (int i=0;i<50;i++) {
-			StdDraw.picture(0, 0, "fondNoir.jpg",i*0.1,i*0.1); //au final on a 5 en largeur et en hauteur (=50*0.1)
-			StdDraw.show(20);
-		}
-		StdDraw.text(0, 2.5-0.5, "FIN DU JEU");
-		StdDraw.text(-2+0.8, 2.5-1.3, "Score "+A.name+" : ");
-		StdDraw.text(-2+1.8,2.5-1.3, Integer.toString(A.score));
-		StdDraw.text(-2+0.8, 2.5-1.8, "Score "+B.name+" : ");
-		StdDraw.text(-2+1.8,2.5-1.8, Integer.toString(B.score));
-		StdDraw.text(0, 2.5-2.5, "GRAND VAINQUEUR : ");
-		if (A.score>B.score) {
-			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.text(0, 2.5-2.8, A.name);
-		}
-		if (A.score<B.score) {
-			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.text(0, 2.5-2.8, B.name);
-		}
-		if (A.score==B.score){
-			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.text(0,2.5-2.8,"Egalité");
-		}
-		StdDraw.picture(-1.2, -1.5, "rej.png",1.9,1.3);
-		StdDraw.picture(1.2, -1.5, "quit.png",1.9,1.3);
-		StdDraw.show(20);
-		while(true) {
-			double pox;
-			double poy;
-
-			if (StdDraw.isMousePressed()) {
-				pox = StdDraw.mouseX();
-				poy =StdDraw.mouseY();
-				try {
-					Thread.sleep(200);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			if (pox>=0.38 && pox<=1.96 && poy>=-1.69 && poy<=-1.23) {
-			//	Animation qui apparait quand on a clique le bouton quitter
-				for (int i=0;i<100;i++) {
-				StdDraw.picture(-1, 100-i, "voletFerme.jpg",8,8);
-				StdDraw.show(20);
-				}
-				
-			}
-			if (pox>=-2.01 && pox<=-0.42 && poy>=-1.69 && poy<=-1.23) {
-			//	Pour rejouer
-				A.score_provisoire = 0;
-				B.score_provisoire = 0;
-				A.position = 3.1;
-				B.position = 3.1;
-				A.pos_tab = -1;
-				A.nb_tresor = 0;
-				A.game=1;
-				B.pos_tab = -1;
-				B.nb_tresor = 0;
-				B.game=0;
-				Phase.phase =1;
-				A.score =0;
-				B.score =0;
-				Phase.C= new Cave(1);
-				Phase.D = new Cave(2);
-				Phase.E = new Cave(3);
-				Phase.F = new Oxygene(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
-				Phase.nb_niveaux_initial = (int)(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
-				while (!(Phase.posito.isEmpty())) {
-					Phase.posito.remove(0);
-				}
-				Phase.pas = (Phase.HAUTEUR-0.2)/(Phase.C.niveaux +Phase.D.niveaux+Phase.E.niveaux);
-				while (!(Phase.prems.isEmpty())) {
-					Phase.prems.remove(0);
-				}
-				while (!(Phase.deuz.isEmpty())) {
-					Phase.deuz.remove(0);
-				}
-				while (!(Phase.troiz.isEmpty())) {
-					Phase.troiz.remove(0);
-				}
-				
-				while(!(A.coffreBas.isEmpty())) {
-					A.coffreBas.remove(0);
-				}
-				while(!(B.coffreBas.isEmpty())) {
-					B.coffreBas.remove(0);
-				}
-				while(!(A.Intermediaire.isEmpty())) {
-					A.Intermediaire.remove(0);
-				}
-				while(!(B.Intermediaire.isEmpty())) {
-					B.Intermediaire.remove(0);
-				}
-				Lancement.test=0;
-				Lancement.lancer();
-			}
-			}
-		}
-		
-	}
-
-	
-	
 	public static void main(String[] args) {
 		StdDraw.setCanvasSize(720, 670);
 		StdDraw.setXscale(Phase.Xmin,Phase.Xmax);
 		StdDraw.setYscale(Phase.Ymin,Phase.Ymax);
 		try {
-			annonceFinDeJeu(Phase.A, Phase.B);
+			Graphe.annonceFinDeJeu(Phase.A, Phase.B);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

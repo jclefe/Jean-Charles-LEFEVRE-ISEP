@@ -1,40 +1,62 @@
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import edu.princeton.cs.introcs.StdDraw;
 
 public class IA {
 
-	public static void tourDeJeuIA(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, double[]posito, Tresors[]prems,Tresors[] deuz, Tresors[] troiz) throws InterruptedException {
+	public static void tourDeJeuRD(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, ArrayList<Integer> posito, ArrayList<Tresors>prems,ArrayList<Tresors> deuz, ArrayList<Tresors>troiz) throws InterruptedException {
 		int a = (int) (1+Math.random()*3);
-		if () {
+		if (a==1) {
 			InGame.descendre(A,B,F,C,D,E,pas);
 			Thread.sleep(200);
 		}
-		if () {
+		if (a==2) {
 			InGame.monter(A,B,F,pas);
 			Thread.sleep(200); 
 		}
-		if () {
+		if (a==3) {
 			InGame.espace(A,B,F,C, D, E, posito, prems, deuz, troiz);
 			Thread.sleep(200); 
 		}
 	}
 	
-
-	public static int evaluate() {
-		int a = Phase.A.pos_tab;
-		int b = Phase.B.pos_tab;
-		int sca = Phase.A.score;
-		int scb= Phase.B.score;
-		int scpa = Phase.A.score_provisoire;
-		int scpb= Phase.B.score_provisoire;
-		int ox =(int) Phase.F.OxVar;
+//faire pleins de fonctions booleennes qui, en fonction de la reponse va renvoyer sur d'autres fonctions booleennes
+//descendre un maximum et remonter en choppant les coffres 
+	public static void tourDeJeuIA(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, ArrayList<Integer> posito, ArrayList<Tresors>prems,ArrayList<Tresors> deuz, ArrayList<Tresors>troiz) {
+	//est ce que j'ai une instruction en attente de l'evaluation IA précédente ? 
+		//si non : est ce que je suis au dessus ou en dessous de l'adversaire?
+			// si au dessus : est ce que j'ai assez d'oxygene pour remonter a la surface ss que aucun de ns 2 prennent des coffres?
+				//si oui : est ce que je peux descendre au prochain coffre et remonter en choppant les coffres au dessus ? (mais l'autre joueur prend cb d coffres??????????)
+					//si oui : DESCENDRE
+					//si non : ESPACE (ensuite viendra la phase de montée) (un truc du genre : dès que ESPACE, faire UP ensuite)
+				//si non : s'aloudir pour suicide (ESPACE puis direction prochain coffre le plus proche pr encore s'aloudir)
+			// si en dessous : //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		//si oui : faire l'action et en fonction lui en donner une nouvelle action prochaine ou pas
+	
 		
-		
-		
+				
+	}
+	public static boolean IA_dessus(Joueur A, Joueur B) { //répond à : est ce que je suis au dessus ou en dessous de l'adversaire? 
+		if (A.pos_tab <=B.pos_tab) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
+	public static boolean assez_d_ox_sans_nouveau_coffres_monter (Joueur A, Joueur B, Oxygene C) {
+		if (A.pos_tab != -1) {
+			int x = A.pos_tab;
+			int y = B.pos_tab;
+		}
+		A.nb_tresor
+		B.nb_tresor
+		C.OxVar;
+	}
+
 	public static void main(String[] args) {
 	}
 }

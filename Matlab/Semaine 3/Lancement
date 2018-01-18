@@ -19,9 +19,8 @@ public class Lancement {
 		StdDraw.show(20);
 		if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
 			Thread.sleep(200);
-			if (test==1) {//single player
 				Phase.tour_multi();//premiere phase du jeu
-				InGame.annonceFinDePhase(Phase.A,Phase.B); //ecran noir qui annonce le vainqueur temporaire
+				Graphe.annonceFinDePhase(Phase.A,Phase.B); //ecran noir qui annonce le vainqueur temporaire
 				Phase.phase++;
 				int tes = 1;
 				while(tes==1) {
@@ -29,7 +28,7 @@ public class Lancement {
 						Thread.sleep(200);
 						InGame.reinitialisation_phase(); //avant de passer a la phase 2, on remet les parametres joueurs initiaux (position du joueur a la plage...)
 						Phase.tour_multi(); //phase 2 du jeu
-						InGame.annonceFinDePhase(Phase.A,Phase.B);
+						Graphe.annonceFinDePhase(Phase.A,Phase.B);
 						Phase.phase++;
 						tes=2;
 					}
@@ -39,36 +38,10 @@ public class Lancement {
 						Thread.sleep(200);
 						InGame.reinitialisation_phase();
 						Phase.tour_multi();
-						InGame.annonceFinDeJeu(Phase.A,Phase.B); //annonce le vainqueur final et propose de rejouer ou quitter le jeu
+						Graphe.annonceFinDeJeu(Phase.A,Phase.B); //annonce le vainqueur final et propose de rejouer ou quitter le jeu
 						tes=0;
 					}
 				}
-			}
-			if (test==2) { //multiplayer
-				Phase.tour_multi();
-				InGame.annonceFinDePhase(Phase.A,Phase.B);
-				Phase.phase++;
-				int tes = 1;
-				while(tes==1) {
-					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
-						Thread.sleep(200);
-						InGame.reinitialisation_phase();
-						Phase.tour_multi();
-						InGame.annonceFinDePhase(Phase.A,Phase.B);
-						Phase.phase++;
-						tes=2;
-					}
-				}
-				while(tes==2) {
-					if (StdDraw.isKeyPressed(KeyEvent.VK_ENTER)) {
-						Thread.sleep(200);
-						InGame.reinitialisation_phase();
-						Phase.tour_multi();
-						InGame.annonceFinDeJeu(Phase.A,Phase.B);
-						tes=0;
-					}
-				}
-			}
 			}
 	}
 	}

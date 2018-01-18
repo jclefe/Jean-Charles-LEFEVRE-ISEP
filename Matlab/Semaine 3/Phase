@@ -5,13 +5,6 @@ import edu.princeton.cs.introcs.StdDraw;
 //exporter en JAR
 //faire l'IA
 
-//pb qd en phase 2 on choppe un coffre de la liste mais qu'on remonte pas a tps, il disparait ds la phase 3. 
-	//ca vient de A.Intermediaire.remove(naha) ds game
-	//Solution : une liste intermediaire2 qui ajoute les élements qu'on remove de la liste intermediaire, cette liste intermediaire2 
-	//revient a 0 quand le joueur remonte a la surface
-	//en passant a la phase suivant on fait un intermediaire.addAll(intermediaire2) et theoriquement ca devrait marcher
-
-
 public class Phase {
 
 	public final static double LARGEUR = 6;
@@ -67,12 +60,11 @@ public class Phase {
 	
 //	while(true) {
 /*	long t= System.currentTimeMillis();
-	long end = t+30000;
+	long end = t+45000;
 	while(System.currentTimeMillis() < end) { */
 	
 	while(Oxygene.OxVar>0) { //condition d'arret qd il y a plus d'oxyg
 	
-		
 		
 		//pour faire jouer le joueur le plus bas en premier 
 		if (A.position<B.position) {
@@ -93,13 +85,14 @@ public class Phase {
 			A.game=0;
 			B.game=1;
 			}
-		}
+		} 
+		
 		
 		
 		
 		
 		tour=0; //tour permet de faire jouer le joueur le plus bas apres un tour de jeu (correspond a 2 coups)
-		while(tour<2) { //c'est pour faire jouer le joueur le plus bas en premier
+		while(tour<2 && Oxygene.OxVar>0) { //c'est pour faire jouer le joueur le plus bas en premier
 		Graphe.afficher_fond();
 		
 		
@@ -149,11 +142,11 @@ public class Phase {
 			InGame.tourDeJeu(A,B,F,C,D,E,pas,posito,prems,deuz,troiz);
 		}
 		if (B.game ==1){ 
-			if(Lancement.test==2) {
-				InGame.tourDeJeu(B,A, F,C,D,E,pas,posito,prems,deuz,troiz); //si on a choisi multiplayer
+			if(Lancement.test==2) { //si on a choisi multiplayer
+				InGame.tourDeJeu(B,A,F,C,D,E,pas,posito,prems,deuz,troiz); 
 			}
-			if(Lancement.test==1) {
-				InGame.tourDeJeuIA(B,A,F,C,D,E,pas,posito,prems,deuz,troiz); //si on a choisi single player
+			if(Lancement.test==1) { //si on a choisi single player
+				IA.tourDeJeuRD(B,A,F,C,D,E,pas,posito,prems,deuz,troiz);
 			}
 		}
 		
@@ -178,7 +171,6 @@ public class Phase {
 		StdDraw.text(2.5, (2.85-(C.niveaux*pas)+2.85-(C.niveaux+D.niveaux)*pas)/2, "Cave 2");
 		StdDraw.text(2.5, (-2.9+2.85-(C.niveaux+D.niveaux)*pas)/2, "Cave 3");
 		StdDraw.line( -3, 2.85-(C.niveaux+D.niveaux)*pas , 3 , 2.85-(C.niveaux+D.niveaux)*pas);
-		
 		StdDraw.show(20);
 		}
 	}

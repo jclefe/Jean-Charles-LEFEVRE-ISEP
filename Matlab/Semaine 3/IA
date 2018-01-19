@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import edu.princeton.cs.introcs.StdDraw;
 
 public class IA {
-
+	public static int ts = 0;
 	public static void tourDeJeuRD(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, ArrayList<Integer> posito, ArrayList<Tresors>prems,ArrayList<Tresors> deuz, ArrayList<Tresors>troiz) throws InterruptedException {
 		int a = (int) (1+Math.random()*3);
 		if (a==1) {
@@ -23,40 +23,239 @@ public class IA {
 	
 //faire pleins de fonctions booleennes qui, en fonction de la reponse va renvoyer sur d'autres fonctions booleennes
 //descendre un maximum et remonter en choppant les coffres 
-	public static void tourDeJeuIA(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, ArrayList<Integer> posito, ArrayList<Tresors>prems,ArrayList<Tresors> deuz, ArrayList<Tresors>troiz) {
 	//est ce que j'ai une instruction en attente de l'evaluation IA précédente ? 
-		//si non : est ce que je suis au dessus ou en dessous de l'adversaire?
-			// si au dessus : est ce que j'ai assez d'oxygene pour remonter a la surface ss que aucun de ns 2 prennent des coffres?
-				//si oui : est ce que je peux descendre au prochain coffre et remonter en choppant les coffres au dessus ? (mais l'autre joueur prend cb d coffres??????????)
-					//si oui : DESCENDRE
-					//si non : ESPACE (ensuite viendra la phase de montée) (un truc du genre : dès que ESPACE, faire UP ensuite)
-				//si non : s'aloudir pour suicide (ESPACE puis direction prochain coffre le plus proche pr encore s'aloudir)
-			// si en dessous : //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		//si oui : faire l'action et en fonction lui en donner une nouvelle action prochaine ou pas
+			//si non : est ce que je suis au dessus ou en dessous de l'adversaire?
+				// si au dessus : est ce que j'ai assez d'oxygene pour remonter a la surface ss que aucun de ns 2 prennent des coffres?
+					//si oui : est ce que je peux descendre au prochain coffre et remonter en choppant les coffres au dessus ? en considerant que le joueur prennent le coffre a son niveau si y'a ou qu'il descend d'un cran, puis choppe le coffre et remonte
+					//si oui : est ce que je peux descendre au prochain coffre et remonter en choppant les coffres au dessus ? Compter le nb de coups que ca me 
+	//prendra (dc autant de coups pour l'autre joueur)
+	//voir si en remontant cb d'oxygene il reste comme marge
+						//si oui : DESCENDRE
+						//si non : ESPACE (ensuite viendra la phase de montée) (un truc du genre : dès que ESPACE, faire UP ensuite)
+					//si non : s'aloudir pour suicide (ESPACE puis direction prochain coffre le plus proche pr encore s'aloudir)
+				// si en dessous : //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			
+			//si oui : faire l'action et en fonction lui en donner une nouvelle action prochaine ou pas
 	
-		
-				
-	}
-	public static boolean IA_dessus(Joueur A, Joueur B) { //répond à : est ce que je suis au dessus ou en dessous de l'adversaire? 
-		if (A.pos_tab <=B.pos_tab) {
-			return true;
+	public static void tourDeJeuIA(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, ArrayList<Integer> posito, ArrayList<Tresors>prems,ArrayList<Tresors> deuz, ArrayList<Tresors>troiz) throws InterruptedException {
+		double ox = oxy_restant(A, B,F, prochain_coffre_bas(A));
+		if (A.pos_tab==-1) {
+			InGame.descendre(A, B, F, C, D, E, pas);
+			return; 
 		}
-		else {
-			return false;
+		if(ox>=0 && ts!=1) {
+			InGame.descendre(A, B, F, C, D, E, pas);
+			return;
 		}
+		if(ox<0 || ts==1) {
+			remonte(A,B,F,C,D,E,pas,posito,prems,deuz,troiz);
+			ts = 1;
+			return;
+		}
+		if (A.pos_tab==0 && A.nb_tresor==0) {
+			InGame.descendre(A, B, F, C, D, E, pas);
+		}
+		if (A.pos_tab==0 && A.nb_tresor!=0) {
+			InGame.monter(A, B, F, pas);
+		}
+		InGame.monter(A, B, F, pas);
+		return;
 	}
 	
-	public static boolean assez_d_ox_sans_nouveau_coffres_monter (Joueur A, Joueur B, Oxygene C) {
-		if (A.pos_tab != -1) {
-			int x = A.pos_tab;
-			int y = B.pos_tab;
+	public static int prochain_coffre_bas(Joueur A) {
+		int x = 1;
+		if (A.pos_tab != Phase.C.niveaux+Phase.D.niveaux+Phase.E.niveaux -1) {
+			while(Phase.posito.get(A.pos_tab+x)==0) {
+				x++;
+			}
 		}
-		A.nb_tresor
-		B.nb_tresor
-		C.OxVar;
+		if (A.pos_tab==Phase.C.niveaux+Phase.D.niveaux+Phase.E.niveaux -1) {
+			return 0;
+		}
+		return x;
 	}
-
-	public static void main(String[] args) {
+	
+	public static double oxy_restant(Joueur A, Joueur B, Oxygene C, int v) { //v correspond au niveau du dessous le plus coffre ayant toujours un coffre
+		double oxy = C.OxVar-v;
+		int posB = B.pos_tab;
+		int posA = A.pos_tab + v;
+		if(posA==posB) { 
+			return 0;
+		}
+		int nb1 = A.nb_tresor;
+		int nb2 = B.nb_tresor;
+		int gluck1=0;
+		int gluck2=0;
+		if (posA<=posB) { //IA au dessus
+			for (int g=0;g<((posA+1)*4-1);g++) {
+				if (gluck1==0) {	
+					if(Phase.posito.get(posA)==0) {
+						oxy-=1+nb1;
+						posA--;
+						gluck1=1;
+					}
+					if(Phase.posito.get(posA)==1) {
+						oxy-=1;
+						nb1++;
+						posA--;
+						gluck1=1;
+					}
+				}
+				if (gluck1==1) {
+					if(Phase.posito.get(posB)==0) {
+						oxy-=1+nb2;
+						posB--;
+						gluck1=0;
+					}
+					if(Phase.posito.get(posB)==1) {
+						oxy-=1;
+						nb2++;
+						posB--;
+						gluck1=0;
+					}
+				}
+			}
+			return oxy;
+		}
+		
+		if (posB<posA) { //IA en dessous
+			for (int g=0;g<((posB+1)*4-1);g++) {
+				if (gluck2==0) {	
+					if(Phase.posito.get(posA)==0) {
+						oxy-=1+nb1;
+						posA--;
+						gluck2=1;
+					}
+					if(Phase.posito.get(posA)==1) {
+						oxy-=1;
+						nb1++;
+						posA--;
+						gluck2=1;
+					}
+				}
+				if (gluck2==1) {
+					if(Phase.posito.get(posB)==0) {
+						oxy-=1+nb2;
+						posB--;
+						gluck2=0;
+					}
+					if(Phase.posito.get(posB)==1) {
+						oxy-=1;
+						nb2++;
+						posB--;
+						gluck2=0;
+					}
+				}
+			}
+			for(int u=0;u<posA+1;u++) {
+				oxy-=7;//1 consommé par l'IA et 6 consomme par l'adversaire (choisi au hasard pour l'adversaire)
+			}
+			return oxy;
+		}
+	/*	if (posA<posB) { //si l'IA est au dessus
+			int nombreDeCoups_pr_remonterSurface = (posA+1)*2;
+		//	int nb1 = A.nb_tresor;
+			//int nb2 = B.nb_tresor;
+			
+			for (int h=posB;h>posA;h--) {
+				oxy-= (1+nb2+1);
+				nb2++;
+			}
+			for (int j=posA;j>=0;j--) {
+				oxy -= (1+nb1+1);
+				nb1++;
+			}
+			oxy -= (posA+1)*nb2+nb1;
+			
+			for (int i=0;i<nombreDeCoups_pr_remonterSurface;i++) {
+			/*	if ((posB-posA)<=posA) {//si le joueur le plus bas arriver a rattraper l'autre avt qu'il remonte sur la plage 
+					while (posB>posA) {
+						oxy -= (1+nb2+1);
+						nb2++;
+						posB--;
+					}
+					fd=1;
+				}
+				else {
+					for (int j=0;j<(nombreDeCoups_pr_remonterSurface -1);j++) {
+						oxy -= (1+nb2+1);
+						nb2++;
+					}
+				}
+				if(fd ==1) {
+					oxy-=nb2;
+				}
+				oxy -= (1+nb1+1);
+				nb1++;*/
+			//}
+		//}
+		/*else {//si l'IA est en dessous de l'adversaire en position
+			int nombreDeCoups_pr_remonterSurfaceIA = (A.pos_tab+1)*2;
+			int nombreDeCoups_pr_remonterSurfaceAdversaire = (B.pos_tab+1)*2;
+			System.out.println("adversaire : "+nombreDeCoups_pr_remonterSurfaceAdversaire);//////////////////////////////////
+			System.out.println("nous : "+nombreDeCoups_pr_remonterSurfaceIA);///////////////////////////////////////////////
+		//	int nb1 = A.nb_tresor;
+		//	int nb2 = B.nb_tresor;
+			for (int i=0;i<nombreDeCoups_pr_remonterSurfaceAdversaire;i++) {
+				if (Phase.posito.get(posA)==1) {/////////////////////////////////
+					oxy -= 1+nb1+1;
+					nb1++;
+					posA--;
+				}
+				if (Phase.posito.get(posA)==0) {//////////////////////////////
+					oxy-=nb1;
+					posA--;
+				}
+				if (Phase.posito.get(posB)==1) {/////////////////////////////////:
+					oxy-= 1+nb2+1;
+					nb2++;
+					posB--;
+				}
+				if (Phase.posito.get(posB)==0) {//////////////////////////////
+					oxy-=nb2;
+					posB--;
+				}
+			}
+			for (int k=nombreDeCoups_pr_remonterSurfaceAdversaire;k<nombreDeCoups_pr_remonterSurfaceIA;k++) {
+				oxy--; //l'adervseraire etant remonte a la surface n a plus de coffres et on considere qu'il n'aura plus le temps de prendre de nvx coffres dc il coutera 1oxygene
+				if (Phase.posito.get(posA)==1) {////////////////////////////
+					oxy -= 1+nb1+1;
+					nb1++;
+					posA--;
+				}
+				if (Phase.posito.get(posA)==0) {//////////////////////////////
+					oxy-=nb1;
+					posA--;
+				}
+			}
+		}*/
+		return oxy;
+	}
+	
+	public static void remonte(Joueur A, Joueur B, Oxygene F, Cave C, Cave D, Cave E, double pas, ArrayList<Integer> posito, ArrayList<Tresors>prems,ArrayList<Tresors> deuz, ArrayList<Tresors>troiz) throws InterruptedException {
+			if (A.pos_tab>0) {
+				if (Phase.posito.get(A.pos_tab)==1) {
+					InGame.espace(A, B, F, C, D, E, posito, prems, deuz, troiz);
+					return;
+				}
+				if (Phase.posito.get(A.pos_tab)==0) {
+					InGame.monter(A, B, F, pas);
+					return;
+				}
+			}
+			if (A.pos_tab==0) {
+				if(Phase.posito.get(0)==0) {
+					InGame.monter(A, B, F, pas);
+					return;
+				}
+				if(Phase.posito.get(0)==1) {
+					InGame.espace(A, B, F, C, D, E, posito, prems, deuz, troiz);
+					return;
+				}
+			}
+		}
+	
+	public static void main(String[] args) throws InterruptedException {
+		Lancement.lancer();
 	}
 }

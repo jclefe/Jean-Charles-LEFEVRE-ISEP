@@ -2,9 +2,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import edu.princeton.cs.introcs.StdDraw;
 
-//exporter en JAR
-//faire l'IA
-
 public class Phase {
 
 	public final static double LARGEUR = 6;
